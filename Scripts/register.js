@@ -138,7 +138,7 @@ class RegisterManager {
 
     checkAuthAndUpdateUI() {
         if (JSON.parse(localStorage.getItem('signedInUser'))) {
-            window.location.href = 'home.html';
+            window.location.href = 'Home.html';
             return false;
         }
         return true;
