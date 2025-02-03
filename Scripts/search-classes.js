@@ -291,7 +291,10 @@ class YogaClass {
         };
         return descriptions[type] || 'Join us for this amazing yoga class!';
     }
- 
+    handleLogout() {
+        localStorage.removeItem('signedInUser');
+        window.location.href = 'Home.html';
+    }
     
  }
  
