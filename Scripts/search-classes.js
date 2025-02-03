@@ -34,9 +34,11 @@ class YogaClass {
  
     setupEventListeners() {
         document.querySelector('.search-button').addEventListener('click', () => this.handleSearch());
-        document.getElementById('logoutBtn').addEventListener('click', () => this.handleLogout());
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();  // מונע את ההתנהגות הדיפולטיבית
+            this.handleLogout();
+        });
     }
- 
     getInitialClasses() {
         if (localStorage.getItem('yogaClasses')) {
             return JSON.parse(localStorage.getItem('yogaClasses'));
@@ -290,13 +292,11 @@ class YogaClass {
         return descriptions[type] || 'Join us for this amazing yoga class!';
     }
  
-    handleLogout() {
-        localStorage.removeItem('signedInUser');
-        window.location.href = 'Home.html';
-    }
+    
  }
  
  let yogaClassSearch;
  window.onload = () => {
     yogaClassSearch = new YogaClassSearch();
  };
+
