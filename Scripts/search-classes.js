@@ -35,8 +35,9 @@ class YogaClass {
     setupEventListeners() {
         document.querySelector('.search-button').addEventListener('click', () => this.handleSearch());
         document.getElementById('logoutBtn').addEventListener('click', (e) => {
-            e.preventDefault();  // מונע את ההתנהגות הדיפולטיבית
-            this.handleLogout();
+            e.preventDefault();
+            localStorage.removeItem('signedInUser');
+            window.location.href = 'Home.html';
         });
     }
     getInitialClasses() {
@@ -291,10 +292,7 @@ class YogaClass {
         };
         return descriptions[type] || 'Join us for this amazing yoga class!';
     }
-    handleLogout() {
-        localStorage.removeItem('signedInUser');
-        window.location.href = 'Home.html';
-    }
+   
     
  }
  
