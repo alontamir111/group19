@@ -8,7 +8,7 @@ from bson import ObjectId
 from datetime import datetime
 
 
-# מחלקה להמרת ObjectId ל-JSON
+# Class for converting ObjectId to JSON
 class JSONEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, ObjectId):
@@ -18,22 +18,22 @@ class JSONEncoder(json.JSONEncoder):
         return super(JSONEncoder, self).default(obj)
 
 
-# טעינת משתני סביבה מקובץ .env
+# Load environment variables from .env file
 load_dotenv()
 
-# URI מקובץ .env
+# URI from .env file
 uri = os.environ.get('DB_URI', 'mongodb://localhost:27017/')
 
-# יצירת התחברות לשרת MongoDB
+# Create connection to MongoDB server
 client = MongoClient(uri, server_api=ServerApi('1'))
 
-# התחברות למסד הנתונים
+# Connect to database
 db = client['yoga_spot_db']
 
 
 def print_collection_data(collection_name):
     """
-    הדפסת כל הנתונים מאוסף מסוים
+    Print all data from a specified collection
     """
     print(f"\n--- Collection: {collection_name} ---\n")
 
@@ -44,10 +44,10 @@ def print_collection_data(collection_name):
         print(f"No data found in {collection_name} collection")
         return
 
-    # הדפסת מספר המסמכים
+    # Print number of documents
     print(f"Total documents: {len(data)}\n")
 
-    # הדפסת כל מסמך בפורמט JSON מסודר
+    # Print each document in formatted JSON
     for doc in data:
         json_str = json.dumps(doc, indent=2, cls=JSONEncoder)
         print(json_str)
@@ -56,34 +56,34 @@ def print_collection_data(collection_name):
 
 def main():
     """
-    פונקציה ראשית - מדפיסה את כל האוספים והנתונים שלהם
+    Main function - prints all collections and their data
     """
     print("\n=== MongoDB Database Analysis ===\n")
 
-    # קבלת רשימת האוספים
+    # Get list of collections
     collections = db.list_collection_names()
 
     print(f"Database: yoga_spot_db")
     print(f"Total collections: {len(collections)}")
     print(f"Collections: {', '.join(collections)}\n")
 
-    # הדפסת נתונים מכל אוסף
+    # Print data from each collection
     for collection_name in collections:
         print_collection_data(collection_name)
 
 
 if __name__ == "__main__":
-    # בדיקת חיבור למסד הנתונים
+    # Test database connection
     try:
         client.admin.command('ping')
         print("MongoDB connection successful!")
 
-        # הרצת הפונקציה הראשית
+        # Run main function
         main()
 
     except Exception as e:
         print(f"MongoDB connection error: {e}")
 
     finally:
-        # סגירת החיבור
+        # Close connection
         client.close()

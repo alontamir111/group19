@@ -1,7 +1,7 @@
-// classes.js - קובץ JavaScript לדף סוגי שיעורים
+// classes.js - JavaScript file for class types page
 
 document.addEventListener('DOMContentLoaded', function() {
-    // פונקציה לבדיקה אם אלמנט נראה במסך
+    // Function to check if element is visible on screen
     function isElementInViewport(el) {
         const rect = el.getBoundingClientRect();
         return (
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
         );
     }
 
-    // פונקציה להוספת קלאס לאלמנטים שנראים במסך
+    // Function to add class to elements visible on screen
     function handleScroll() {
         const items = document.querySelectorAll('.class-card');
 
@@ -23,11 +23,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // הוספת אנימציות לכרטיסיות כאשר גוללים
+    // Add animations to cards when scrolling
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // בדיקה ראשונית בטעינת הדף
+    handleScroll(); // Initial check on page load
 
-    // הוספת אפקט hover לתמונות
+    // Add hover effect to images
     const classImages = document.querySelectorAll('.class-image');
     classImages.forEach(image => {
         image.addEventListener('mouseenter', function() {
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // הוספת אנימציות לאלמנטים של ציוד
+    // Add animations to equipment elements
     const equipmentItems = document.querySelectorAll('.equipment-list li');
     equipmentItems.forEach(item => {
         item.addEventListener('mouseenter', function() {
@@ -51,13 +51,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // הוספת אירוע לחיצה על הדיפיקלטי
+    // Add click event to difficulty badges
     const difficultyBadges = document.querySelectorAll('.difficulty-badge');
     difficultyBadges.forEach(badge => {
         badge.addEventListener('click', function() {
-            const difficulty = this.classList[1]; // לקיחת הקלאס השני שהוא סוג הקושי
+            const difficulty = this.classList[1]; // Take the second class which is the difficulty type
 
-            // הצגת חלונית עם הסבר על רמת הקושי
+            // Show popup with explanation about difficulty level
             const difficulties = {
                 'beginner': 'Perfect for newcomers to yoga. Focus on basic poses and proper alignment.',
                 'intermediate': 'For practitioners with some experience. Includes more challenging poses and sequences.',

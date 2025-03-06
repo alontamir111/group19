@@ -5,9 +5,9 @@ app = Flask(__name__,
            static_folder='static')
 
 # Secret key for sessions
-app.secret_key = 'your_secret_key_here'  # חשוב לאבטחת טפסים
+app.secret_key = 'your_secret_key_here'  # Important for form security
 
-# יבוא של ה-Blueprints
+# Import Blueprints
 from pages.profile.profile import profile_bp
 from pages.homepage.Home import homepage
 from pages.searchClasses.searchClasses import searchClasses_bp
@@ -19,27 +19,26 @@ from pages.studios.studios import studios
 from pages.classTypes.classTypes import classTypes
 
 
-
-# רישום ה-Blueprints
+# Register Blueprints
 app.register_blueprint(homepage)
 app.register_blueprint(profile_bp, url_prefix='/profile')
 app.register_blueprint(about_us, url_prefix='/about')
 app.register_blueprint(contact_us, url_prefix='/contact')
 app.register_blueprint(register_bp, url_prefix='/register')
-app.register_blueprint(signin, url_prefix='/signin')  # שם חדש ונתיב חדש
+app.register_blueprint(signin, url_prefix='/signin')  # New name and new path
 app.register_blueprint(studios, url_prefix='/studios')
 app.register_blueprint(classTypes, url_prefix='/classes')
 app.register_blueprint(searchClasses_bp, url_prefix='/searchClasses')
 
-# Context processor להוספת פונקציות לכל התבניות
+# Context processor to add functions to all templates
 @app.context_processor
 def utility_processor():
     def is_active(path):
-        # פונקציה שבודקת אם הנתיב הוא הנתיב הנוכחי
+        # Function that checks if the path is the current path
         return path == request.path
     return dict(is_active=is_active)
 
-# טיפול בשגיאות
+# Error handling
 @app.errorhandler(404)
 def page_not_found(e):
     return "Page not found - 404", 404
@@ -50,11 +49,11 @@ def internal_error(e):
 
 @app.route('/logout')
 def logout():
-    # ניקוי הסשן
+    # Clear the session
     session.clear()
-    # הודעת התנתקות למשתמש
+    # Send logout message to user
     flash('You have been logged out successfully', 'success')
-    # הפניה לדף הבית
+    # Redirect to homepage
     return redirect(url_for('homepage.index'))
 
 

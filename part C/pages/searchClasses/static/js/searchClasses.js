@@ -1,4 +1,4 @@
-// searchClasses.js - קובץ JavaScript לדף חיפוש שיעורים
+// searchClasses.js - JavaScript file for the class search page
 
 document.addEventListener('DOMContentLoaded', () => {
     // Get DOM elements
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => {
                 console.error('Error loading instructors:', error);
-                // אם יש שגיאה, נשתמש ברשימה סטטית כגיבוי
+                // If there's an error, use a static list as backup
                 const instructors = [
                     {name: "Sarah Cohen"},
                     {name: "Danny Levy"},
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to handle the search
     function handleSearch() {
-        // הצגת אינדיקציית טעינה
+        // Display loading indicator
         searchResults.innerHTML = '<div class="loading">Loading classes...</div>';
 
         // Get filter values

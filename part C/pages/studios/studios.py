@@ -8,7 +8,7 @@ studios = Blueprint('studios', __name__,
 
 @studios.route('/')
 def index():
-    # דוגמה של סטודיו - בפרויקט אמיתי זה יגיע ממסד הנתונים
+    # Sample studio data - in a real project this would come from the database
     studios_data = [
         {
             'name': 'Tel Aviv Main Studio',
@@ -32,7 +32,7 @@ def index():
         }
     ]
 
-    # מיפוי של תמונות התקני סטודיו
+    # Studio facility images mapping
     facilities = [
         {
             'name': 'Quality Props',
@@ -52,7 +52,7 @@ def index():
         {
             'name': 'Modern Shower Facilities',
             'description': 'Our clean, modern shower facilities make it easy to freshen up after your practice.',
-            'image': 'shower-cubicles.jpg'  # שם התמונה המתוקן
+            'image': 'shower-cubicles.jpg'  # Corrected image name
         }
     ]
 

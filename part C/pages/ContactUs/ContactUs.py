@@ -15,14 +15,14 @@ contact_us = Blueprint(
 def index():
     if request.method == 'POST':
         try:
-            # קבלת נתונים מהטופס
+            # Get form data
             name = request.form.get('name')
             email = request.form.get('email')
-            phone = request.form.get('phone', '')  # אופציונלי
+            phone = request.form.get('phone', '')  # Optional
             subject = request.form.get('subject')
             message = request.form.get('message')
 
-            # בדיקת שדות חובה
+            # Check required fields
             if not name or not email or not subject or not message:
                 if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                     return jsonify({
@@ -32,7 +32,7 @@ def index():
                 flash('Please fill in all required fields', 'error')
                 return redirect(url_for('contact_us.index'))
 
-            # יצירת אובייקט פנייה
+            # Create contact request object
             contact_request = {
                 'name': name,
                 'email': email,
@@ -44,13 +44,13 @@ def index():
                 'user_id': None
             }
 
-            # אם המשתמש מחובר למערכת, נשמור את המזהה שלו
+            # If user is logged in, save their ID
             if 'user_email' in session:
                 user = db_connector.get_user_by_email(session['user_email'])
                 if user:
                     contact_request['user_id'] = user.get('_id')
 
-            # הוספת הפנייה למסד הנתונים
+            # Add the contact request to the database
             result = db_connector.contact_requests_col.insert_one(contact_request)
 
             if result.inserted_id:

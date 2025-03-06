@@ -1,7 +1,7 @@
-// studios.js - קובץ JavaScript לדף הסטודיו
+// studios.js - JavaScript file for the studios page
 
 document.addEventListener('DOMContentLoaded', function() {
-    // פונקציה לבדיקה אם אלמנט נראה במסך
+    // Function to check if element is visible in viewport
     function isElementInViewport(el) {
         const rect = el.getBoundingClientRect();
         return (
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
         );
     }
 
-    // פונקציה להוספת קלאס לאלמנטים שנראים במסך
+    // Function to add class to elements visible in viewport
     function handleScroll() {
         const items = document.querySelectorAll('.studio-card, .facility-item');
 
@@ -23,11 +23,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // הפעלת הפונקציה בטעינה ובגלילה
+    // Execute function on load and scroll
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // בדיקה ראשונית בטעינת הדף
+    handleScroll(); // Initial check on page load
 
-    // אפקט hover לתמונות הסטודיו
+    // Hover effect for studio images
     const studioImages = document.querySelectorAll('.studio-image');
     studioImages.forEach(image => {
         image.addEventListener('mouseenter', function() {
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // אנימציה נוספת לפריטי התקני הסטודיו
+    // Additional animation for studio facility items
     const facilityItems = document.querySelectorAll('.facility-item');
     facilityItems.forEach(item => {
         item.addEventListener('mouseenter', function() {
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // אנימציה לרשימת האמניטיס
+    // Animation for amenities list
     const amenityItems = document.querySelectorAll('.amenities-list li');
     amenityItems.forEach(item => {
         item.addEventListener('mouseenter', function() {

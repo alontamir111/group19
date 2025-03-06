@@ -1,4 +1,4 @@
-// contact-us.js - קובץ JavaScript לדף צור קשר
+// contact-us.js - JavaScript file for Contact Us page
 
 document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.getElementById('contactForm');
@@ -42,9 +42,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // הוספת אנימציות לאלמנטים בדף
+    // Add animations to page elements
 
-    // אנימציית כניסה לפריטי מידע
+    // Entry animation for info items
     const infoItems = document.querySelectorAll('.info-item');
     infoItems.forEach((item, index) => {
         setTimeout(() => {
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 200 * index);
     });
 
-    // הוספת אפקט hover לתמונה
+    // Add hover effect to image
     const contactImage = document.querySelector('.contact-image img');
     if (contactImage) {
         contactImage.addEventListener('mouseenter', function() {
@@ -66,28 +66,28 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // התאמת גובה הטופס לחלק המידע
+    // Adjust form height to match info section
     function adjustFormHeight() {
         const formSection = document.querySelector('.contact-form-section');
         const infoSection = document.querySelector('.contact-info-section');
 
-        // איפוס הגובה קודם כל
+        // Reset height first
         if (formSection) {
             formSection.style.height = 'auto';
         }
 
-        // התאמת גובה רק אם יש את שני האלמנטים ורוחב המסך מספיק גדול
+        // Adjust height only if both elements exist and screen is wide enough
         if (formSection && infoSection && window.innerWidth > 992) {
             const infoHeight = infoSection.offsetHeight;
             formSection.style.height = `${infoHeight}px`;
         }
     }
 
-    // הפעלת פונקציית התאמת הגובה בטעינה ובשינוי גודל מסך
+    // Run height adjustment function on load and window resize
     adjustFormHeight();
     window.addEventListener('resize', adjustFormHeight);
 
-    // אפקט לשדות הטופס - הדגשת התווית בעת פוקוס
+    // Effect for form fields - highlight label on focus
     const formInputs = document.querySelectorAll('.form-group input, .form-group textarea, .form-group select');
     formInputs.forEach(input => {
         input.addEventListener('focus', function() {
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // בדיקת תקינות דואר אלקטרוני
+    // Email validation
     const emailInput = document.getElementById('email');
     if (emailInput) {
         emailInput.addEventListener('blur', function() {
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (this.value && !emailRegex.test(this.value)) {
                 this.classList.add('invalid');
 
-                // הוספת הודעת שגיאה אם לא קיימת
+                // Add error message if it doesn't exist
                 let errorMessage = this.nextElementSibling;
                 if (!errorMessage || !errorMessage.classList.contains('error-message')) {
                     errorMessage = document.createElement('span');
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 this.classList.remove('invalid');
 
-                // הסרת הודעת שגיאה אם קיימת
+                // Remove error message if it exists
                 const errorMessage = this.nextElementSibling;
                 if (errorMessage && errorMessage.classList.contains('error-message')) {
                     errorMessage.remove();

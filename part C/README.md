@@ -1,106 +1,87 @@
-# WEB course 2024 Part C
-# The Yoga Spot - אתר לניהול סטודיו יוגה
+# The Yoga Spot - Yoga Studio Management Website
+## WEB course 2024 - Part C
 
-## סקירת הפרויקט
+## Project Overview
 
-"The Yoga Spot" הוא אתר המיועד לסטודיו יוגה שמאפשר למשתמשים להירשם, לחפש שיעורי יוגה לפי קריטריונים שונים, להזמין מקומות בשיעורים ולנהל את הפרופיל האישי שלהם. האתר נועד לשפר את חווית המשתמש עבור מתרגלי יוגה ולאפשר להם לנהל את פעילויות היוגה שלהם בקלות ובנוחות.
+"The Yoga Spot" is a website designed for a yoga studio that allows users to register, search for yoga classes based on various criteria, book places in classes, and manage their personal profiles. The website aims to improve the user experience for yoga practitioners and enable them to manage their yoga activities easily and conveniently.
 
-## מדריך משתמש
+The project includes a full implementation of the server side using Flask and MongoDB, addressing all requirements: proper directory structure, client request handling, database connection and queries, form implementation, and a complete user experience.
 
-### ביקור בדף הבית
-1. נווט לדף הבית של האתר.
-2. בדף הבית תוכל לקרוא על הסטודיו ולראות אפשרויות ניווט מהירות לחלקים השונים באתר.
+## Website Workflow
 
-### הרשמה
-3. לחץ על כפתור 'הרשמה' כדי להירשם כמשתמש חדש.
-4. מלא את טופס ההרשמה עם הפרטים האישיים שלך.
-5. שלח את הטופס כדי ליצור את החשבון החדש שלך.
+Here is the typical sequence of actions for a user on the website:
 
-### התחברות
-6. אם אתה משתמש קיים, לחץ על כפתור 'התחברות'.
-7. הזן את פרטי ההתחברות שלך (אימייל וסיסמה).
-8. לחץ על 'התחבר' כדי לגשת לחשבון שלך.
+1. **Visit the Homepage** - The user arrives at the homepage and is exposed to information about the studio and navigation options.
+2. **Register/Login** - A new user registers or an existing user logs in.
+3. **Search for Classes** - The user searches for suitable yoga classes using various filters.
+4. **Book a Class** - Selection of an appropriate class and booking a spot.
+5. **Profile Management** - View and update personal details, view existing bookings and cancel future bookings if necessary.
+6. **Send Inquiries** - Use the "Contact Us" form for inquiries and questions.
+7. **View Additional Information** - Browse information pages such as class types, studio locations, and more.
+8. **Logout** - Exit the system and return to the homepage.
 
-### חיפוש שיעורים
-9. לאחר ההתחברות, נווט לדף 'חיפוש שיעורים' דרך סרגל הניווט.
-10. השתמש במסנני החיפוש כדי למצוא שיעורים המתאימים להעדפותיך (סוג שיעור, רמה, זמן, מיקום, מדריך).
-11. צפה ברשימת השיעורים שתואמים את קריטריוני החיפוש שלך.
+## Website Pages and Functionality
 
-### הזמנת שיעורים
-12. לחץ על כפתור 'הזמן מקום' ליד השיעור שתרצה להשתתף בו.
-13. אשר את ההזמנה שלך.
-14. צפה באישור ההזמנה ובפרטי השיעור.
+### Homepage
+The homepage displays general information about the studio, atmosphere images, and an introduction to the experience offered by the studio. The page includes quick links to different sections of the website.
 
-### צפייה ועדכון פרופיל
-15. נווט לדף 'פרופיל' דרך סרגל הניווט.
-16. צפה בפרטים האישיים שלך והזמנות השיעורים שלך.
-17. ערוך את הפרטים האישיים שלך במידת הצורך.
-18. צפה בהיסטוריית ההזמנות שלך ובטל הזמנות עתידיות אם נדרש.
+![HomePage1.jpg](static/media/README_img/HomePage1.jpg)
 
-### שליחת פניות צור קשר
-19. נווט לדף 'צור קשר' דרך סרגל הניווט.
-20. מלא את טופס יצירת הקשר עם פרטיך והודעתך.
-21. שלח את הטופס ליצירת קשר עם הסטודיו.
+### Registration Page
+Allows new users to register with their personal details. The form includes validation and requires acceptance of the terms of use and privacy policy through a popup window, allowing the user to read the terms before approval.
 
-### צפייה וניהול פניות
-22. בדף 'פרופיל', נווט ללשונית "My Contact Requests".
-23. צפה בכל הפניות שיצרת.
-24. מחק פניות קודמות לפי הצורך.
+![Register.jpg](static/media/README_img/Register.jpg)
+![Terms.jpg](static/media/README_img/Terms.jpg)
 
-### התנתקות
-25. כדי להתנתק מחשבונך, לחץ על כפתור 'התנתק' שנמצא בסרגל הניווט.
-26. תועבר בחזרה לדף הבית.
+### Login Page
+Allows registered users to log in to their account using email and password.
 
-## תכונות
-### (ניתן למצוא תצלומי מסך נוספים בתיקיית 'screenshots')
+![SignIn.jpg](static/media/README_img/SignIn.jpg)
 
-- **דף הבית**: מידע כללי על הסטודיו עם אפשרויות לניווט מהיר באתר.
+### Class Search Page
+A central page that allows users to search for classes based on a variety of criteria: class type, level, time, location, and instructor. Results are displayed in a convenient format and allow for easy booking.
 
-![דף הבית](screenshots/homepage.png "דף הבית")
+![FindClass.jpg](static/media/README_img/FindClass.jpg)
 
-- **דף הרשמה**: למשתמשים חדשים להירשם.
+### Profile Page
+Displays the user's personal details, allows editing them, and includes a list of their class bookings. Users can view their history and cancel future bookings. Additionally, users can view all inquiries made through the "Contact Us" form and delete previous inquiries.
 
-![דף הרשמה](screenshots/register.png "דף הרשמה")
+![Profile1.png](static/media/README_img/Profile1.png)
+![Profile-Classes.png](static/media/README_img/Profile-Classes.png)
+![Profile-Edit.png](static/media/README_img/Profile-Edit.png)
 
-- **דף התחברות**: למשתמשים קיימים להתחבר.
+### Contact Us Page
+Allows users to send messages and questions to the studio through a contact form. Inquiries are saved in the system and can be viewed through the profile page.
 
-![דף התחברות](screenshots/signin.png "דף התחברות")
+![ContactUs.jpg](static/media/README_img/ContactUs.jpg)
 
-- **דף חיפוש שיעורים**: משתמשים רשומים יכולים:
-  - לחפש שיעורים לפי העדפות שונות (סוג, רמה, זמן, מיקום, מדריך).
-  - לצפות בפרטים של כל שיעור.
-  - להזמין מקומות בשיעורים.
+### Class Types Page
+Displays detailed information about all types of classes offered at the studio, including description, difficulty levels, benefits, and images.
 
-![דף חיפוש שיעורים](screenshots/search_classes.png "דף חיפוש שיעורים")
+![OurClasses1.png](static/media/README_img/OurClasses1.png)
+![OurClasses2.png](static/media/README_img/OurClasses2.png)
 
-- **פרטי שיעור**: משתמשים יכולים לצפות בפרטי השיעור לפני ההזמנה.
+### Studio Page
+Displays the various studio locations, including addresses, contact details, maps, and operating hours.
 
-![פרטי שיעור](screenshots/class_details.png "פרטי שיעור")
+![Studios.jpg](static/media/README_img/Studios.jpg)
+![Studios2.png](static/media/README_img/Studios2.png)
 
-- **דף פרופיל**: משתמשים יכולים לנהל את הפרופיל האישי שלהם ולצפות בהזמנות.
+### About Page
+Provides information about the studio, its history, instructors, and the philosophy that guides it.
 
-![דף פרופיל](screenshots/profile.png "דף פרופיל")
+![About.png](static/media/README_img/About.png)
 
-- **דף צור קשר**: משתמשים יכולים לשלוח הודעות ושאלות לסטודיו.
+### Logout
+Allows users to safely log out of the system and return to the homepage.
 
-![דף צור קשר](screenshots/contact.png "דף צור קשר")
+![Signout.png](static/media/README_img/Signout.png)
 
-- **ניהול פניות**: משתמשים יכולים לצפות ולמחוק פניות קודמות שלהם.
+## Technical Implementation
 
-![ניהול פניות](screenshots/my_contact_requests.png "ניהול פניות")
-
-- **דף סוגי שיעורים**: מידע על סוגי השיעורים השונים המוצעים בסטודיו.
-
-![דף סוגי שיעורים](screenshots/class_types.png "דף סוגי שיעורים")
-
-- **דף סטודיו**: מידע על מיקומי הסטודיו, פרטי קשר ושעות פעילות.
-
-![דף סטודיו](screenshots/studios.png "דף סטודיו")
-
-- **אודות**: מידע על הסטודיו והמטרות שלו.
-
-![דף אודות](screenshots/about.png "דף אודות")
-
-- **התנתקות**: מאפשר למשתמשים להתנתק ולחזור לדף הבית.
-
-![כפתור התנתקות](screenshots/logout.png "כפתור התנתקות")
+The website was developed in a Python/Flask environment with support for:
+- Responsive design using HTML5, CSS3, and JavaScript
+- MongoDB database for storing information about users, classes, and bookings
+- Server-side authentication and validation for information security
+- Support for profile image uploads
+- Use of templates for displaying dynamic content

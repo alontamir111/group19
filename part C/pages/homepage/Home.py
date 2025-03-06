@@ -15,7 +15,7 @@ homepage = Blueprint(
 # Routes
 @homepage.route('/')
 def index():
-    return render_template('Home.html')  # לא צריך נתיב מלא - רק שם הקובץ
+    return render_template('Home.html')
 
 
 @homepage.route('/homepage')

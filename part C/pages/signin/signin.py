@@ -2,7 +2,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 import db_connector
 
-# יצירת blueprint
+# Create blueprint
 signin = Blueprint('signin', __name__,
                    template_folder='templates',
                    static_folder='static')
@@ -10,15 +10,15 @@ signin = Blueprint('signin', __name__,
 
 @signin.route('/', methods=['GET', 'POST'])
 def login():
-    # אם המשתמש כבר מחובר, הפנייה לדף חיפוש שיעורים
+    # If user is already logged in, redirect to class search page
     if 'user_email' in session:
-        return redirect(url_for('searchClasses.search'))  # שים לב לשם Blueprint
+        return redirect(url_for('searchClasses.search'))  # Note the Blueprint name
 
     if request.method == 'POST':
         email = request.form.get('email', '').strip()
         password = request.form.get('password', '').strip()
 
-        # בדיקות ולידציה בסיסיות
+        # Basic validation checks
         if not email:
             flash('Please enter your email', 'error')
             return render_template('signin.html')
@@ -27,26 +27,26 @@ def login():
             flash('Please enter your password', 'error')
             return render_template('signin.html')
 
-        # אימות המשתמש מול מסד הנתונים
+        # Authenticate user against database
         success, result = db_connector.authenticate_user(email, password)
 
         if success:
-            # שמירת פרטי המשתמש בסשן
+            # Store user details in session
             session['user_email'] = email
             session['user_id'] = result['_id']
             session['user_name'] = f"{result['firstName']} {result['lastName']}"
 
-            # הפנייה לדף חיפוש שיעורים
+            # Redirect to class search page
             return redirect('/searchClasses')
         else:
-            # הצגת הודעת שגיאה
+            # Display error message
             flash('Invalid email or password', 'error')
 
-    # הצגת דף ההתחברות
+    # Display login page
     return render_template('signin.html')
 
 
 @signin.route('/signin.html')
 def signin_html():
-    # ניתוב נוסף עבור קבצי HTML ישירים
+    # Additional route for direct HTML file access
     return redirect(url_for('signin.login'))

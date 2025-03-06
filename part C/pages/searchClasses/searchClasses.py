@@ -5,13 +5,13 @@ from bson import ObjectId
 import db_connector
 from datetime import datetime
 
-# יצירת Blueprint
+# Create Blueprint
 searchClasses_bp = Blueprint('searchClasses', __name__,
                              template_folder='templates',
                              static_folder='static')
 
 
-# דקורטור לבדיקת התחברות
+# Login check decorator
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -25,8 +25,8 @@ def login_required(f):
 @searchClasses_bp.route('/')
 @login_required
 def search():
-    """תצוגת דף חיפוש השיעורים"""
-    # קבלת נתוני כל סוגי השיעורים והסטודיו לצורך מילוי הפילטרים
+    """Display class search page"""
+    # Get all class types and studios for filtering options
     class_types = db_connector.get_all_class_types()
     studios = db_connector.get_all_studios()
 
@@ -38,11 +38,11 @@ def search():
 @searchClasses_bp.route('/api/instructors')
 @login_required
 def api_instructors():
-    """API להחזרת רשימת מדריכים"""
-    # קבלת כל המדריכים ממסד הנתונים
+    """API to return instructor list"""
+    # Get all instructors from database
     instructors = db_connector.users_col.find({"role": "instructor"})
 
-    # המרה לפורמט JSON
+    # Convert to JSON format
     instructor_list = []
     for instructor in instructors:
         instructor_list.append({
@@ -56,43 +56,43 @@ def api_instructors():
 @searchClasses_bp.route('/api/classes')
 @login_required
 def api_classes():
-    """API להחזרת רשימת שיעורים מסוננת"""
-    # קבלת פרמטרי סינון מה-query string
+    """API to return filtered class list"""
+    # Get filter parameters from query string
     class_type = request.args.get('class_type')
     level = request.args.get('level')
     time = request.args.get('time')
     location = request.args.get('location')
     instructor = request.args.get('instructor')
 
-    # הכנת מילון פרמטרים לפונקציית הסינון
+    # Prepare parameters dictionary for filter function
     filters = {}
     if class_type:
-        filters['classType'] = class_type  # שינוי: שם המפתח תואם לפונקציה בdb_connector
+        filters['classType'] = class_type  # Note: key name matches db_connector function
     if level:
         filters['level'] = level
     if time:
         filters['time_of_day'] = time
     if location:
-        filters['studioId'] = location  # שינוי: שם המפתח תואם לפונקציה בdb_connector
+        filters['studioId'] = location  # Note: key name matches db_connector function
     if instructor:
-        filters['instructorName'] = instructor  # שינוי: שם המפתח תואם לפונקציה בdb_connector
+        filters['instructorName'] = instructor  # Note: key name matches db_connector function
 
-    # קבלת השיעורים המסוננים ממסד הנתונים
+    # Get filtered classes from database
     schedule_items = db_connector.get_upcoming_classes(filters)
 
-    # המרה לפורמט שמתאים לצד לקוח
+    # Convert to client-side friendly format
     user_email = session.get('user_email')
     user = db_connector.get_user_by_email(user_email)
 
     results = []
     for item in schedule_items:
-        # קבלת מידע נוסף על השיעור
+        # Get additional information about the class
         class_type_obj = db_connector.get_class_type_by_id(item.get('classId'))
         studio = db_connector.get_studio_by_id(item.get('studioId'))
         instructor_id = item.get('instructorId')
         instructor = db_connector.users_col.find_one({'_id': instructor_id}) if instructor_id else None
 
-        # בדיקה אם המשתמש רשום לשיעור
+        # Check if user is registered for this class
         is_booked = False
         if user:
             booking = db_connector.bookings_col.find_one({
@@ -102,26 +102,26 @@ def api_classes():
             })
             is_booked = booking is not None
 
-        # פורמט תצוגה של תאריך ושעה
+        # Format date and time display
         start_time = item.get('startTime')
         formatted_date = start_time
         try:
-            # המרה לפורמט יותר ידידותי - תלוי בפורמט המקורי
+            # Convert to more user-friendly format - depends on original format
             dt = datetime.strptime(start_time, '%Y-%m-%dT%H:%M:%S.%fZ')
             formatted_date = dt.strftime('%A, %B %d, %Y %I:%M %p')
         except:
             try:
-                # ניסיון פורמט אחר
+                # Try alternative format
                 dt = datetime.strptime(start_time, '%Y-%m-%dT%H:%M:%S.000Z')
                 formatted_date = dt.strftime('%A, %B %d, %Y %I:%M %p')
             except:
                 pass
 
-        # יצירת אובייקט מידע על השיעור
+        # Create class information object
         result = {
             'id': str(item.get('_id')),
             'name': item.get('name', 'Unknown Class'),
-            'classType': class_type_obj.get('name', 'Unknown Type') if class_type_obj else 'Unknown Type',  # שינוי: הוספת שדה סוג השיעור
+            'classType': class_type_obj.get('name', 'Unknown Type') if class_type_obj else 'Unknown Type',  # Note: Added class type field
             'level': class_type_obj.get('difficulty', 'All Levels') if class_type_obj else 'All Levels',
             'datetime': formatted_date,
             'duration': class_type_obj.get('duration', 60) if class_type_obj else 60,
@@ -137,7 +137,7 @@ def api_classes():
 
         results.append(result)
 
-    # מיון לפי תאריך ושעה
+    # Sort by date and time
     results.sort(key=lambda x: x['datetime'])
 
     return jsonify(results)
@@ -146,7 +146,7 @@ def api_classes():
 @searchClasses_bp.route('/book', methods=['POST'])
 @login_required
 def book_class():
-    """רישום לשיעור"""
+    """Book a class"""
     class_id = request.form.get('classId')
     user_email = session.get('user_email')
 
@@ -161,7 +161,7 @@ def book_class():
 
     print(f"User found: {user.get('_id')}, type: {type(user.get('_id'))}")
 
-    # להשתמש בפונקציה מ-db_connector
+    # Use function from db_connector
     success, result = db_connector.book_class(user.get('_id'), class_id)
 
     if success:
@@ -173,7 +173,7 @@ def book_class():
 @searchClasses_bp.route('/cancel', methods=['POST'])
 @login_required
 def cancel_class():
-    """ביטול רישום לשיעור"""
+    """Cancel class registration"""
     class_id = request.form.get('classId')
     user_email = session.get('user_email')
 
@@ -184,7 +184,7 @@ def cancel_class():
     if not user:
         return jsonify({'success': False, 'message': 'User not found'})
 
-    # מציאת ההזמנה
+    # Find the booking
     booking = db_connector.bookings_col.find_one({
         'userId': ObjectId(user.get('_id')) if isinstance(user.get('_id'), str) else user.get('_id'),
         'scheduleId': ObjectId(class_id),
@@ -194,13 +194,13 @@ def cancel_class():
     if not booking:
         return jsonify({'success': False, 'message': 'Booking not found'})
 
-    # עדכון סטטוס ההזמנה
+    # Update booking status
     db_connector.bookings_col.update_one(
         {'_id': booking.get('_id')},
         {'$set': {'status': 'cancelled', 'paymentStatus': 'refunded'}}
     )
 
-    # עדכון מספר המקומות התפוסים בשיעור
+    # Update occupied spots count in the class
     db_connector.schedule_col.update_one(
         {'_id': ObjectId(class_id)},
         {'$inc': {'bookedCount': -1}}

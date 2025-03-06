@@ -6,19 +6,19 @@ from dotenv import load_dotenv
 from bson import ObjectId
 from datetime import datetime, timedelta
 
-# טעינת משתני סביבה מקובץ .env
+# Load environment variables from .env file
 load_dotenv()
 
-# URI מקובץ .env
+# URI from .env file
 uri = os.environ.get('DB_URI', 'mongodb://localhost:27017/')
 
-# יצירת התחברות לשרת MongoDB
+# Create MongoDB server connection
 client = MongoClient(uri, server_api=ServerApi('1'))
 
-# התחברות למסד הנתונים
+# Connect to database
 db = client['yoga_spot_db']
 
-# אוספים (collections) בפרויקט - לפי מה שראינו בתמונות
+# Collections in the project
 bookings_col = db['bookings']
 classes_col = db['classes']
 schedule_col = db['schedule']
@@ -27,72 +27,72 @@ users_col = db['users']
 contact_requests_col = db['contact_requests']
 
 
-# ----- פונקציות ניהול משתמשים -----
+# ----- User Management Functions -----
 
 def register_user(firstName, lastName, email, phone, city, password, age=None, gender=None):
     """
-    פונקציה להרשמת משתמש חדש - לפי המבנה המדויק שראינו ב-users בתמונה
+    Function to register a new user
     """
-    # בדיקה אם המשתמש כבר קיים
+    # Check if user already exists
     if users_col.find_one({'email': email}):
-        return False, "משתמש עם אימייל זה כבר קיים."
+        return False, "User with this email already exists."
 
     if users_col.find_one({'phone': phone}):
-        return False, "משתמש עם מספר טלפון זה כבר קיים."
+        return False, "User with this phone number already exists."
 
-    # הוספת משתמש חדש
+    # Add new user
     new_user = {
         'firstName': firstName,
         'lastName': lastName,
         'email': email,
         'phone': phone,
         'city': city,
-        'password': password,  # בסביבת פיתוח, סיסמה ללא הצפנה. בסביבת ייצור יש להצפין
+        'password': password,  # In production environment, password should be encrypted
         'registrationDate': datetime.now().strftime('%Y-%m-%d'),
         'role': 'user',
         'active': True
     }
 
-    # הוספת שדות אופציונליים אם סופקו
+    # Add optional fields if provided
     if age:
         new_user['age'] = int(age)
 
     if gender:
         new_user['gender'] = gender
 
-    # הוספת המשתמש למסד הנתונים
+    # Add user to database
     user_id = users_col.insert_one(new_user).inserted_id
 
-    # החזרת ID של המשתמש החדש
+    # Return ID of the new user
     return True, str(user_id)
 
 
 def authenticate_user(email, password):
     """
-    פונקציה לאימות משתמש
+    Function to authenticate a user
     """
     user = users_col.find_one({
         'email': email,
-        'password': password,  # בסביבת ייצור יש לבדוק את הסיסמה המוצפנת
+        'password': password,  # In production environment, should verify encrypted password
         'active': True
     })
 
     if user:
-        # המרה ל-dict רגיל (ללא ObjectId)
+        # Convert to regular dict (without ObjectId)
         user_dict = {k: v for k, v in user.items() if k != '_id'}
         user_dict['_id'] = str(user['_id'])
         return True, user_dict
 
-    return False, "שם משתמש או סיסמה שגויים."
+    return False, "Invalid username or password."
 
 
 def get_user_by_email(email):
     """
-    פונקציה למציאת משתמש לפי אימייל
+    Function to find a user by email
     """
     user = users_col.find_one({'email': email})
     if user:
-        # המרה ל-dict רגיל (ללא ObjectId)
+        # Convert to regular dict (without ObjectId)
         user_dict = {k: v for k, v in user.items() if k != '_id'}
         user_dict['_id'] = str(user['_id'])
         return user_dict
@@ -101,34 +101,34 @@ def get_user_by_email(email):
 
 def update_user(email, user_data):
     """
-    פונקציה לעדכון פרטי משתמש
+    Function to update user details
     """
-    # הסרת שדות שלא ניתן לעדכן
+    # Remove fields that cannot be updated
     if '_id' in user_data:
         del user_data['_id']
 
-    # בדיקה אם האימייל החדש כבר קיים (אם האימייל השתנה)
+    # Check if the new email already exists (if email was changed)
     if 'email' in user_data and user_data['email'] != email:
         if users_col.find_one({'email': user_data['email']}):
-            return False, "אימייל זה כבר בשימוש."
+            return False, "This email is already in use."
 
-    # ביצוע העדכון
+    # Perform update
     result = users_col.update_one(
         {'email': email},
         {'$set': user_data}
     )
 
     if result.modified_count > 0:
-        return True, "פרטי המשתמש עודכנו בהצלחה."
+        return True, "User details updated successfully."
     else:
-        return False, "לא בוצעו שינויים."
+        return False, "No changes were made."
 
 
-# ----- פונקציות לניהול סוגי שיעורים -----
+# ----- Class Types Management Functions -----
 
 def initialize_class_types():
     """
-    אתחול סוגי שיעורים - לפי המבנה המדויק שראינו ב-classes בתמונה
+    Initialize class types
     """
     class_types = [
         {
@@ -166,35 +166,35 @@ def initialize_class_types():
     ]
 
     for class_type in class_types:
-        # בדיקה אם סוג השיעור כבר קיים
+        # Check if class type already exists
         if not classes_col.find_one({'name': class_type['name']}):
             classes_col.insert_one(class_type)
-            print(f"נוסף סוג שיעור: {class_type['name']}")
+            print(f"Added class type: {class_type['name']}")
         else:
-            print(f"סוג שיעור כבר קיים: {class_type['name']}")
+            print(f"Class type already exists: {class_type['name']}")
 
 
 def get_all_class_types():
     """
-    פונקציה לקבלת כל סוגי השיעורים
+    Function to get all class types
     """
     return list(classes_col.find())
 
 
 def get_class_type_by_id(class_id):
     """
-    פונקציה לקבלת סוג שיעור לפי מזהה
+    Function to get class type by ID
     """
     if isinstance(class_id, str):
         class_id = ObjectId(class_id)
     return classes_col.find_one({'_id': class_id})
 
 
-# ----- פונקציות לניהול סטודיו -----
+# ----- Studio Management Functions -----
 
 def initialize_studios():
     """
-    אתחול סטודיו - לפי המבנה המדויק שראינו ב-studios בתמונה
+    Initialize studios
     """
     studios = [
         {
@@ -218,41 +218,41 @@ def initialize_studios():
     ]
 
     for studio in studios:
-        # בדיקה אם הסטודיו כבר קיים
+        # Check if studio already exists
         if not studios_col.find_one({'name': studio['name']}):
             studios_col.insert_one(studio)
-            print(f"נוסף סטודיו: {studio['name']}")
+            print(f"Added studio: {studio['name']}")
         else:
-            print(f"סטודיו כבר קיים: {studio['name']}")
+            print(f"Studio already exists: {studio['name']}")
 
 
 def get_all_studios():
     """
-    פונקציה לקבלת כל הסטודיו
+    Function to get all studios
     """
     return list(studios_col.find())
 
 
 def get_studio_by_id(studio_id):
     """
-    פונקציה לקבלת סטודיו לפי מזהה
+    Function to get studio by ID
     """
     if isinstance(studio_id, str):
         studio_id = ObjectId(studio_id)
     return studios_col.find_one({'_id': studio_id})
 
 
-# ----- פונקציות לניהול לוח זמנים -----
+# ----- Schedule Management Functions -----
 
 def initialize_schedule(days_ahead=30):
     """
-    אתחול לוח זמנים - לפי המבנה המדויק שראינו ב-schedule בתמונה
+    Initialize schedule
     """
-    # קבלת סוגי השיעורים והסטודיו
+    # Get class types and studios
     class_types = list(classes_col.find())
     studios = list(studios_col.find())
 
-    # רשימת מדריכים
+    # List of instructors
     instructors = [
         {'_id': ObjectId(), 'name': 'Sarah Cohen'},
         {'_id': ObjectId(), 'name': 'Danny Levy'},
@@ -260,22 +260,21 @@ def initialize_schedule(days_ahead=30):
         {'_id': ObjectId(), 'name': 'Emma Wilson'}
     ]
 
-    # וידוא שיש מפתחות של classId לכל סוג שיעור
+    # Create map of class types
     class_map = {}
     for class_type in class_types:
         class_map[class_type['name']] = class_type['_id']
 
-    # משתני עזר
-    from datetime import datetime, timedelta
+    # Helper variables
     start_date = datetime.now()
 
     classes_to_add = []
 
-    # יצירת שיעורים לפי הימים
+    # Create classes by days
     for i in range(days_ahead):
         current_date = start_date + timedelta(days=i)
 
-        # מידע על השיעורים היומיים
+        # Daily class information
         day_classes = [
             {
                 'name': 'Morning Flow',
@@ -317,7 +316,7 @@ def initialize_schedule(days_ahead=30):
 
         classes_to_add.extend(day_classes)
 
-    # הוספת כל השיעורים
+    # Add all classes
     if classes_to_add:
         for class_item in classes_to_add:
             existing = schedule_col.find_one({
@@ -328,49 +327,49 @@ def initialize_schedule(days_ahead=30):
             if not existing:
                 schedule_col.insert_one(class_item)
 
-        print(f"נוספו {len(classes_to_add)} שיעורי יוגה")
+        print(f"Added {len(classes_to_add)} yoga classes")
 
 
 def get_upcoming_classes(filters=None):
     """
-    פונקציה לקבלת שיעורים עתידיים עם אפשרות סינון
+    Function to get upcoming classes with filtering options
     """
-    # שאילתת בסיס - עם סינון לפי תאריך תחילה עתידי בלבד
+    # Base query - filter by future start date only
     current_time = datetime.now().strftime('%Y-%m-%dT%H:%M:%S.000Z')
     query = {
         'active': True,
-        'startTime': {'$gt': current_time}  # רק שיעורים עתידיים
+        'startTime': {'$gt': current_time}  # Only future classes
     }
 
-    # איסוף תנאים לשדה classId
+    # Collect conditions for classId field
     class_id_conditions = []
 
-    # הוספת פילטרים נוספים
+    # Add additional filters
     if filters:
-        # פילטר סוג שיעור
+        # Class type filter
         if 'classType' in filters and filters['classType']:
             class_type = filters['classType']
-            # מציאת ה-ID של סוג השיעור לפי שם
+            # Find class type ID by name
             class_type_doc = classes_col.find_one({'name': class_type})
             if class_type_doc:
                 class_id = class_type_doc['_id']
                 class_id_conditions.append({'classId': class_id})
 
-        # פילטר רמת קושי
+        # Difficulty level filter
         if 'level' in filters and filters['level']:
-            # מציאת ID של סוגי שיעורים ברמה המבוקשת
+            # Find IDs of class types with requested level
             level_classes = classes_col.find({'difficulty': filters['level']})
             class_ids = [cls['_id'] for cls in level_classes]
             if class_ids:
                 class_id_conditions.append({'classId': {'$in': class_ids}})
 
-        # פילטר סטודיו
+        # Studio filter
         if 'studioId' in filters and filters['studioId']:
             query['studioId'] = ObjectId(filters['studioId'])
 
-        # פילטר מדריך
+        # Instructor filter
         if 'instructorName' in filters and filters['instructorName']:
-            # מציאת המדריך לפי שם
+            # Find instructor by name
             instructor_name_parts = filters['instructorName'].split()
             if len(instructor_name_parts) == 2:
                 first_name, last_name = instructor_name_parts
@@ -382,7 +381,7 @@ def get_upcoming_classes(filters=None):
                 if instructor:
                     query['instructorId'] = instructor['_id']
             else:
-                # חיפוש חופשי בשם המדריך (שם מלא או חלקי)
+                # Free search in instructor name (full or partial name)
                 instructors = users_col.find({'role': 'instructor'})
                 instructor_ids = []
                 search_name = filters['instructorName'].lower()
@@ -395,13 +394,13 @@ def get_upcoming_classes(filters=None):
                 if instructor_ids:
                     query['instructorId'] = {'$in': instructor_ids}
 
-        # אפשרות לסינון לפי שעות היום
+        # Time of day filter
         if 'time_of_day' in filters and filters['time_of_day']:
             time_of_day = filters['time_of_day']
             time_query = None
 
             if time_of_day == 'morning':
-                # שיעורי בוקר (6:00-12:00)
+                # Morning classes (6:00-12:00)
                 time_query = {
                     '$or': [
                         {'startTime': {'$regex': 'T0[6-9]'}},
@@ -409,7 +408,7 @@ def get_upcoming_classes(filters=None):
                     ]
                 }
             elif time_of_day == 'afternoon':
-                # שיעורי צהריים (12:00-17:00)
+                # Afternoon classes (12:00-17:00)
                 time_query = {
                     '$or': [
                         {'startTime': {'$regex': 'T12'}},
@@ -417,7 +416,7 @@ def get_upcoming_classes(filters=None):
                     ]
                 }
             elif time_of_day == 'evening':
-                # שיעורי ערב (17:00-23:00)
+                # Evening classes (17:00-23:00)
                 time_query = {
                     '$or': [
                         {'startTime': {'$regex': 'T1[7-9]'}},
@@ -430,39 +429,40 @@ def get_upcoming_classes(filters=None):
                     query['$and'] = []
                 query['$and'].append(time_query)
 
-    # שילוב כל התנאים של classId
+    # Combine all classId conditions
     if class_id_conditions:
         if len(class_id_conditions) == 1:
-            # אם יש רק תנאי אחד, אפשר להוסיף אותו ישירות
+            # If there's only one condition, add it directly
             query.update(class_id_conditions[0])
         else:
-            # אם יש כמה תנאים, צריך להשתמש ב-$and
+            # If there are multiple conditions, use $and
             if '$and' not in query:
                 query['$and'] = []
             query['$and'].extend(class_id_conditions)
 
-    # שליפת הנתונים וסידור לפי זמן
+    # Retrieve data and sort by time
     return list(schedule_col.find(query).sort('startTime', 1))
+
 
 def get_class_details(schedule_id):
     """
-    פונקציה לקבלת פרטי שיעור מורחבים
+    Function to get detailed class information
     """
     if isinstance(schedule_id, str):
         schedule_id = ObjectId(schedule_id)
 
-    # שליפת הנתונים על השיעור
+    # Get class information
     schedule_item = schedule_col.find_one({'_id': schedule_id})
     if not schedule_item:
         return None
 
-    # שליפת סוג השיעור
+    # Get class type information
     class_type = classes_col.find_one({'_id': schedule_item['classId']})
 
-    # שליפת הסטודיו
+    # Get studio information
     studio = studios_col.find_one({'_id': schedule_item['studioId']})
 
-    # יצירת אובייקט מידע מורחב
+    # Create detailed information object
     class_details = {
         'id': str(schedule_item['_id']),
         'name': schedule_item['name'],
@@ -478,34 +478,34 @@ def get_class_details(schedule_id):
     return class_details
 
 
-# ----- פונקציות לניהול הזמנות -----
+# ----- Booking Management Functions -----
 
 def book_class(user_id, schedule_id):
     """
-    פונקציה להרשמה לשיעור
+    Function to book a class
     """
-    print(f"DB: Booking class for user_id: {user_id}, schedule_id: {schedule_id}")
-    print(f"Types - user_id: {type(user_id)}, schedule_id: {type(schedule_id)}")
+    # print(f"DB: Booking class for user_id: {user_id}, schedule_id: {schedule_id}")
+    # print(f"Types - user_id: {type(user_id)}, schedule_id: {type(schedule_id)}")
 
-    # המרה למזהים
+    # Convert to IDs
     if isinstance(user_id, str):
         user_id = ObjectId(user_id)
 
     if isinstance(schedule_id, str):
         schedule_id = ObjectId(schedule_id)
 
-    # וידוא שהשיעור קיים
+    # Verify class exists
     schedule_item = schedule_col.find_one({'_id': schedule_id})
     if not schedule_item:
-        return False, "השיעור לא נמצא"
+        return False, "Class not found"
 
-    print(f"Schedule found: {schedule_item.get('name')}")
+    # print(f"Schedule found: {schedule_item.get('name')}")
 
-    # בדיקה אם השיעור מלא
+    # Check if class is full
     if schedule_item.get('bookedCount', 0) >= schedule_item.get('capacity', 0):
-        return False, "השיעור מלא"
+        return False, "Class is full"
 
-    # בדיקה אם כבר קיימת הזמנה
+    # Check if booking already exists
     existing_booking = bookings_col.find_one({
         'userId': user_id,
         'scheduleId': schedule_id,
@@ -513,9 +513,9 @@ def book_class(user_id, schedule_id):
     })
 
     if existing_booking:
-        return False, "כבר קיימת הזמנה לשיעור זה"
+        return False, "Booking already exists for this class"
 
-    # יצירת הזמנה חדשה
+    # Create new booking
     booking_data = {
         'userId': user_id,
         'scheduleId': schedule_id,
@@ -525,32 +525,32 @@ def book_class(user_id, schedule_id):
         'price': schedule_item.get('price', 0)
     }
 
-    # שמירת ההזמנה
+    # Save booking
     booking_id = bookings_col.insert_one(booking_data).inserted_id
 
-    # עדכון מספר המקומות המוזמנים
+    # Update booked count
     schedule_col.update_one(
         {'_id': schedule_id},
         {'$inc': {'bookedCount': 1}}
     )
 
-    print(f"Booking created with ID: {booking_id}")
+    # print(f"Booking created with ID: {booking_id}")
     return True, str(booking_id)
 
 
 def cancel_booking(booking_id):
     """
-    פונקציה לביטול הזמנה
+    Function to cancel a booking
     """
     if isinstance(booking_id, str):
         booking_id = ObjectId(booking_id)
 
-    # וידוא שההזמנה קיימת
+    # Verify booking exists
     booking = bookings_col.find_one({'_id': booking_id})
     if not booking:
-        return False, "ההזמנה לא נמצאה"
+        return False, "Booking not found"
 
-    # עדכון ההזמנה
+    # Update booking
     bookings_col.update_one(
         {'_id': booking_id},
         {'$set': {
@@ -559,56 +559,55 @@ def cancel_booking(booking_id):
         }}
     )
 
-    # עדכון מספר המקומות המוזמנים
+    # Update booked count
     schedule_col.update_one(
         {'_id': booking['scheduleId']},
         {'$inc': {'bookedCount': -1}}
     )
 
-    return True, "ההזמנה בוטלה בהצלחה"
+    return True, "Booking cancelled successfully"
 
 
 def get_user_bookings(user_id):
     """
-    פונקציה לקבלת הזמנות של משתמש
+    Function to get user bookings
     """
-    print(f"Fetching bookings for user_id: {user_id}, type: {type(user_id)}")
+    # print(f"Fetching bookings for user_id: {user_id}, type: {type(user_id)}")
 
     if isinstance(user_id, str):
         user_id = ObjectId(user_id)
-        print(f"Converted to ObjectId: {user_id}")
+        # print(f"Converted to ObjectId: {user_id}")
 
-    # שליפת ההזמנות
+    # Get bookings
     bookings = list(bookings_col.find({
         'userId': user_id,
         'status': 'confirmed'
     }))
 
-    print(f"Found {len(bookings)} bookings")
+    # print(f"Found {len(bookings)} bookings")
 
     result = []
     current_time = datetime.now()
 
     for booking in bookings:
-        print(f"Processing booking: {booking.get('_id')}")
+        # print(f"Processing booking: {booking.get('_id')}")
 
-        # שליפת פרטי השיעור
+        # Get class information
         schedule_item = schedule_col.find_one({'_id': booking['scheduleId']})
         if not schedule_item:
-            print(f"Schedule item not found for scheduleId: {booking['scheduleId']}")
-            continue  # דילוג על הזמנות ללא שיעור מתאים
+            # print(f"Schedule item not found for scheduleId: {booking['scheduleId']}")
+            continue  # Skip bookings without matching class
 
-        print(f"Schedule item found: {schedule_item.get('_id')}")
-        print(
-            f"Schedule item instructorId: {schedule_item.get('instructorId')}, type: {type(schedule_item.get('instructorId'))}")
+        # print(f"Schedule item found: {schedule_item.get('_id')}")
+        # print(f"Schedule item instructorId: {schedule_item.get('instructorId')}, type: {type(schedule_item.get('instructorId'))}")
 
-        # שליפת פרטי סוג השיעור
+        # Get class type information
         class_type = classes_col.find_one({'_id': schedule_item['classId']})
 
-        # שליפת פרטי הסטודיו
+        # Get studio information
         studio = studios_col.find_one({'_id': schedule_item['studioId']})
 
-        # פורמט תאריך ושעה
+        # Format date and time
         start_time = schedule_item.get('startTime', '')
         formatted_date = start_time
         class_datetime = None
@@ -626,15 +625,15 @@ def get_user_bookings(user_id):
                 formatted_date = "Unknown date"
                 formatted_time = "Unknown time"
 
-        # בדיקה האם השיעור כבר עבר
+        # Check if class is in the past
         is_past = False
         if class_datetime:
             is_past = class_datetime < current_time
 
-        # שליפת שם המדריך
+        # Get instructor name
         instructor_name = get_instructor_name(schedule_item.get('instructorId'))
 
-        # יצירת אובייקט מידע על ההזמנה
+        # Create booking information object
         booking_info = {
             'id': str(booking['_id']),
             'className': schedule_item.get('name', 'Unknown Class'),
@@ -644,7 +643,7 @@ def get_user_bookings(user_id):
             'studio': studio.get('name', 'Unknown') if studio else 'Unknown',
             'price': booking.get('price', 0),
             'scheduleId': str(schedule_item['_id']),
-            'isPast': is_past,  # סימון אם השיעור כבר התקיים
+            'isPast': is_past,  # Mark if class has already occurred
             'classType': class_type.get('name', 'Unknown') if class_type else 'Unknown',
             'instructor': instructor_name,
             'level': class_type.get('difficulty', 'all-levels') if class_type else 'all-levels'
@@ -652,274 +651,54 @@ def get_user_bookings(user_id):
 
         result.append(booking_info)
 
-    # מיון התוצאות - שיעורים עתידיים קודם, ואז שיעורים שעברו
+    # Sort results - future classes first, then past classes
     return sorted(result, key=lambda x: (x['isPast'], x['date'], x['time']))
 
-# def get_user_bookings(user_id):
-#     """
-#     פונקציה לקבלת הזמנות של משתמש
-#     """
-#     print(f">>> get_user_bookings - התחלה: user_id={user_id}, type={type(user_id)}")
-#
-#     if isinstance(user_id, str):
-#         user_id = ObjectId(user_id)
-#         print(f">>> המרת מזהה משתמש ל-ObjectId: {user_id}")
-#
-#     # שליפת ההזמנות
-#     bookings = list(bookings_col.find({
-#         'userId': user_id,
-#         'status': 'confirmed'
-#     }))
-#
-#     print(f">>> נמצאו {len(bookings)} הזמנות מאושרות")
-#
-#     result = []
-#     current_time = datetime.now()
-#
-#     for booking in bookings:
-#         print(f"\n>>> מעבד הזמנה: {booking.get('_id')}")
-#
-#         # בדיקה אם scheduleId קיים
-#         if 'scheduleId' not in booking:
-#             print(f"!!! שגיאה: scheduleId חסר בהזמנה {booking.get('_id')}")
-#             continue
-#
-#         # שליפת פרטי השיעור
-#         schedule_item = schedule_col.find_one({'_id': booking['scheduleId']})
-#         if not schedule_item:
-#             print(f"!!! שגיאה: שיעור לא נמצא עבור scheduleId: {booking['scheduleId']}")
-#             continue
-#
-#         print(f">>> שיעור נמצא: {schedule_item.get('_id')}")
-#
-#         # בדיקה אם classId קיים
-#         if 'classId' not in schedule_item:
-#             print(f"!!! שגיאה: classId חסר בשיעור {schedule_item.get('_id')}")
-#             continue
-#
-#         # שליפת פרטי סוג השיעור
-#         class_type = classes_col.find_one({'_id': schedule_item['classId']})
-#         if not class_type:
-#             print(f"!!! שגיאה: סוג שיעור לא נמצא עבור classId: {schedule_item['classId']}")
-#             continue
-#
-#         # בדיקה אם studioId קיים
-#         if 'studioId' not in schedule_item:
-#             print(f"!!! שגיאה: studioId חסר בשיעור {schedule_item.get('_id')}")
-#             continue
-#
-#         # שליפת פרטי הסטודיו
-#         studio = studios_col.find_one({'_id': schedule_item['studioId']})
-#         if not studio:
-#             print(f"!!! שגיאה: סטודיו לא נמצא עבור studioId: {schedule_item['studioId']}")
-#             continue
-#
-#         # בדיקה אם startTime קיים
-#         if 'startTime' not in schedule_item:
-#             print(f"!!! שגיאה: startTime חסר בשיעור {schedule_item.get('_id')}")
-#             continue
-#
-#         # פורמט תאריך ושעה
-#         start_time = schedule_item['startTime']
-#         try:
-#             class_datetime = datetime.strptime(start_time, '%Y-%m-%dT%H:%M:%S.000Z')
-#             formatted_date = class_datetime.strftime('%d/%m/%Y')
-#             formatted_time = class_datetime.strftime('%H:%M')
-#         except ValueError:
-#             try:
-#                 class_datetime = datetime.strptime(start_time, '%Y-%m-%dT%H:%M:%S.%fZ')
-#                 formatted_date = class_datetime.strftime('%d/%m/%Y')
-#                 formatted_time = class_datetime.strftime('%H:%M')
-#             except ValueError:
-#                 print(f"!!! שגיאה: לא ניתן לנתח את פורמט התאריך: {start_time}")
-#                 continue
-#
-#         # בדיקה האם השיעור כבר עבר
-#         is_past = class_datetime < current_time
-#
-#         # בדיקה אם instructorId קיים
-#         if 'instructorId' not in schedule_item:
-#             print(f"!!! שגיאה: instructorId חסר בשיעור {schedule_item.get('_id')}")
-#             continue
-#
-#         # שליפת שם המדריך
-#         instructor = users_col.find_one({'_id': schedule_item['instructorId']})
-#         if not instructor:
-#             print(f"!!! שגיאה: מדריך לא נמצא עבור instructorId: {schedule_item['instructorId']}")
-#             continue
-#
-#         instructor_name = f"{instructor.get('firstName', '')} {instructor.get('lastName', '')}"
-#         if not instructor_name.strip():
-#             print(f"!!! שגיאה: שם המדריך ריק עבור instructorId: {schedule_item['instructorId']}")
-#             continue
-#
-#         # יצירת אובייקט מידע על ההזמנה
-#         booking_info = {
-#             'id': str(booking['_id']),
-#             'className': schedule_item['name'],
-#             'date': formatted_date,
-#             'time': formatted_time,
-#             'duration': class_type['duration'],
-#             'studio': studio['name'],
-#             'price': booking['price'],
-#             'scheduleId': str(schedule_item['_id']),
-#             'isPast': is_past,
-#             'classType': class_type['name'],
-#             'instructor': instructor_name,
-#             'level': class_type['difficulty']
-#         }
-#
-#         result.append(booking_info)
-#         print(f">>> הזמנה נוספה לתוצאות: {booking_info['className']} בתאריך {booking_info['date']}")
-#
-#     # מיון התוצאות - שיעורים עתידיים קודם, ואז שיעורים שעברו
-#     sorted_result = sorted(result, key=lambda x: (x['isPast'], x['date'], x['time']))
-#     print(f"\n>>> סה\"כ {len(sorted_result)} הזמנות נמצאו ומוחזרות")
-#
-#     return sorted_result
 
-# פונקציית עזר לקבלת שם המדריך
+# Helper function to get instructor name
 def get_instructor_name(instructor_id):
-    """קבלת שם המדריך לפי מזהה"""
-    print(f"get_instructor_name called with ID: {instructor_id}, type: {type(instructor_id)}")
+    """Get instructor name by ID"""
+    # print(f"get_instructor_name called with ID: {instructor_id}, type: {type(instructor_id)}")
 
     if not instructor_id:
         return "Unknown Instructor"
 
     instructor = users_col.find_one({'_id': instructor_id})
-    print(f"Instructor search result: {instructor}")
+    # print(f"Instructor search result: {instructor}")
 
     if instructor:
         return f"{instructor.get('firstName', '')} {instructor.get('lastName', '')}"
     return "Unknown Instructor"
 
+
 def initialize_database():
     """
-    פונקציה לאתחול מסד הנתונים
+    Function to initialize the database
     """
     initialize_class_types()
     initialize_studios()
     initialize_schedule()
 
-    print("מסד הנתונים אותחל בהצלחה!")
+    # print("Database initialized successfully!")
 
 
-# פונקציה לבדיקת חיבור
+# Function to test connection
 def test_connection():
     try:
-        # בדיקת חיבור
+        # Test connection
         client.admin.command('ping')
-        print("חיבור למסד הנתונים נוצר בהצלחה!")
+        print("Database connection established successfully!")
         return True
     except Exception as e:
-        print(f"שגיאה בחיבור למסד הנתונים: {e}")
+        print(f"Error connecting to database: {e}")
         return False
-
-
-# def get_upcoming_classes(filters=None):
-#     """
-#     פונקציה לקבלת שיעורים עתידיים עם אפשרות סינון
-#     """
-#     # שאילתת בסיס - עם סינון לפי תאריך תחילה עתידי בלבד
-#     current_time = datetime.now().strftime('%Y-%m-%dT%H:%M:%S.000Z')
-#     query = {
-#         'active': True,
-#         'startTime': {'$gt': current_time}  # רק שיעורים עתידיים
-#     }
-#
-#     # הוספת פילטרים נוספים
-#     if filters:
-#         if 'classType' in filters and filters['classType']:
-#             class_type = filters['classType']
-#             class_id = None
-#             # מציאת ה-ID של סוג השיעור לפי שם
-#             class_type_doc = classes_col.find_one({'name': class_type})
-#             if class_type_doc:
-#                 class_id = class_type_doc['_id']
-#             if class_id:
-#                 query['classId'] = class_id
-#
-#         if 'studioId' in filters and filters['studioId']:
-#             query['studioId'] = ObjectId(filters['studioId'])
-#
-#         if 'instructorName' in filters and filters['instructorName']:
-#             # מציאת המדריך לפי שם
-#             instructor_name_parts = filters['instructorName'].split()
-#             if len(instructor_name_parts) == 2:
-#                 first_name, last_name = instructor_name_parts
-#                 instructor = users_col.find_one({
-#                     'firstName': first_name,
-#                     'lastName': last_name,
-#                     'role': 'instructor'
-#                 })
-#                 if instructor:
-#                     query['instructorId'] = instructor['_id']
-#             else:
-#                 # חיפוש חופשי בשם המדריך (שם מלא או חלקי)
-#                 instructors = users_col.find({'role': 'instructor'})
-#                 instructor_ids = []
-#                 search_name = filters['instructorName'].lower()
-#
-#                 for instructor in users_col.find({'role': 'instructor'}):
-#                     full_name = f"{instructor.get('firstName', '')} {instructor.get('lastName', '')}".lower()
-#                     if search_name in full_name:
-#                         instructor_ids.append(instructor['_id'])
-#
-#                 if instructor_ids:
-#                     query['instructorId'] = {'$in': instructor_ids}
-#
-#         # אפשרות לסינון לפי שעות היום
-#         if 'time_of_day' in filters and filters['time_of_day']:
-#             time_of_day = filters['time_of_day']
-#             time_query = None
-#
-#             if time_of_day == 'morning':
-#                 # שיעורי בוקר (6:00-12:00)
-#                 time_query = {
-#                     '$or': [
-#                         {'startTime': {'$regex': 'T0[6-9]'}},
-#                         {'startTime': {'$regex': 'T1[0-1]'}}
-#                     ]
-#                 }
-#             elif time_of_day == 'afternoon':
-#                 # שיעורי צהריים (12:00-17:00)
-#                 time_query = {
-#                     '$or': [
-#                         {'startTime': {'$regex': 'T12'}},
-#                         {'startTime': {'$regex': 'T1[3-6]'}}
-#                     ]
-#                 }
-#             elif time_of_day == 'evening':
-#                 # שיעורי ערב (17:00-23:00)
-#                 time_query = {
-#                     '$or': [
-#                         {'startTime': {'$regex': 'T1[7-9]'}},
-#                         {'startTime': {'$regex': 'T2[0-3]'}}
-#                     ]
-#                 }
-#
-#             if time_query:
-#                 if '$and' not in query:
-#                     query['$and'] = []
-#                 query['$and'].append(time_query)
-#
-#         # אם יש סינון לפי רמת קושי
-#         if 'level' in filters and filters['level']:
-#             # מציאת ID של סוגי שיעורים ברמה המבוקשת
-#             level_classes = classes_col.find({'difficulty': filters['level']})
-#             class_ids = [cls['_id'] for cls in level_classes]
-#             if class_ids:
-#                 query['classId'] = {'$in': class_ids}
-#
-#     # שליפת הנתונים וסידור לפי זמן
-#     return list(schedule_col.find(query).sort('startTime', 1))
 
 
 def initialize_contact_requests():
     """
-    אתחול קולקשן של פניות צור קשר
+    Initialize contact requests collection
     """
-    # בדיקה אם קיימות פניות לדוגמה
+    # Check if sample requests exist
     if contact_requests_col.count_documents({}) == 0:
         sample_requests = [
             {
@@ -945,25 +724,25 @@ def initialize_contact_requests():
         ]
 
         contact_requests_col.insert_many(sample_requests)
-        print(f"נוספו {len(sample_requests)} פניות לדוגמה")
+        # print(f"Added {len(sample_requests)} sample requests")
 
 
 def get_user_contact_requests(user_email):
     """
-    קבלת פניות צור קשר של משתמש לפי אימייל
+    Get user contact requests by email
 
     Args:
-        user_email: האימייל של המשתמש
+        user_email: User's email
 
     Returns:
-        list: רשימת פניות צור קשר של המשתמש
+        list: List of user's contact requests
     """
     try:
         requests = contact_requests_col.find({'email': user_email}).sort('date', -1)
         contact_requests_list = []
 
         for req in requests:
-            # המרת תאריך אם קיים
+            # Convert date if exists
             date_str = "Unknown"
             if 'date' in req and req['date']:
                 if isinstance(req['date'], datetime):
@@ -987,13 +766,13 @@ def get_user_contact_requests(user_email):
 
 def delete_contact_request(request_id):
     """
-    מחיקת פניית צור קשר לפי מזהה
+    Delete contact request by ID
 
     Args:
-        request_id: המזהה של הפנייה למחיקה
+        request_id: ID of the request to delete
 
     Returns:
-        tuple: (הצלחה, הודעה)
+        tuple: (success, message)
     """
     try:
         result = contact_requests_col.delete_one({'_id': ObjectId(request_id)})
@@ -1006,7 +785,8 @@ def delete_contact_request(request_id):
         print(f"Error deleting contact request: {e}")
         return False, f"Error: {str(e)}"
 
-# הפעלת בדיקת חיבור אם הקובץ מופעל ישירות
+
+# Run connection test if file is executed directly
 if __name__ == "__main__":
     if test_connection():
         initialize_database()

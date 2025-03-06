@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordInput = document.getElementById('password');
     const confirmPasswordInput = document.getElementById('confirmPassword');
     const ageInput = document.getElementById('age');
-    // שינוי מאלמנט select לקבוצת radio buttons
+    // Changed from select element to radio buttons group
     const genderRadios = document.querySelectorAll('input[name="gender"]');
     const termsCheckbox = document.getElementById('terms');
 
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         confirmPasswordInput.addEventListener('input', validateConfirmPassword);
         ageInput.addEventListener('input', validateAge);
 
-        // שינוי מאזנה לselect לאזנה ל-radio buttons
+        // Changed from select listener to radio buttons listeners
         genderRadios.forEach(radio => {
             radio.addEventListener('change', validateGender);
         });
@@ -197,9 +197,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function validateGender() {
-        // שינוי מבדיקת select לבדיקת radio buttons
+        // Changed from select validation to radio buttons validation
         const selectedGender = document.querySelector('input[name="gender"]:checked');
-        // אנחנו צריכים למצוא את אלמנט השגיאה - הוא נמצא אחרי קבוצת הרדיו באטנס
+        // We need to find the error element - it's located after the radio buttons group
         const errorElement = document.querySelector('.gender-selection .error-message');
 
         if (!selectedGender) {
@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.target.value = value;
     });
 
-    // הוספת פונקציונליות למודל תנאי השימוש
+    // Adding functionality for terms and conditions modal
     const termsLink = document.querySelector('.terms-link');
     const termsModal = document.getElementById('termsModal');
     const closeButton = document.querySelector('.close');
@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // סגירת המודל בלחיצה מחוץ לתוכן
+    // Close the modal when clicking outside of its content
     window.addEventListener('click', function(e) {
         if (e.target === termsModal) {
             termsModal.style.display = 'none';
