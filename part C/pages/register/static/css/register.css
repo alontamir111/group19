@@ -1,0 +1,308 @@
+/* Register.css */
+.register-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.register-content {
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.register-form-section,
+.register-info-section {
+    flex: 1;
+    min-width: 300px;
+    padding: 2rem;
+    background-color: var(--accent-light);
+    border-radius: 10px;
+    box-shadow: 0 2px 5px var(--overlay-color);
+}
+
+.register-form-section h2 {
+    color: var(--secondary-color);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.register-form-section > p {
+    color: var(--accent-dark);
+    margin-bottom: 2rem;
+}
+
+.register-form {
+    margin-top: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group input:not([type="checkbox"]) {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid rgba(92, 141, 137, 0.3);
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--accent-dark);
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.checkbox-group input {
+    margin-right: 0.5rem;
+}
+
+.checkbox-group label {
+    margin-bottom: 0;
+}
+
+.terms-link {
+    color: var(--accent-dark);
+    text-decoration: none;
+}
+
+.terms-link:hover {
+    text-decoration: underline;
+}
+
+.submit-btn {
+    background-color: var(--accent-dark);
+    color: var(--accent-light);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.submit-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+.login-link {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.login-link a {
+    color: var(--accent-dark);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* Info Section */
+.register-info-section h3 {
+    color: var(--secondary-color);
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.register-info-section h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background-color: var(--accent-dark);
+}
+
+.benefits-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.benefits-list li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.benefits-list li i {
+    font-size: 1.2rem;
+    color: var(--accent-dark);
+    margin-right: 1rem;
+    margin-top: 0.3rem;
+}
+
+.benefits-list li div {
+    flex: 1;
+}
+
+.benefits-list li h4 {
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+}
+
+.benefits-list li p {
+    color: var(--secondary-color);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.image-container {
+    margin-top: 2rem;
+}
+
+.image-container img {
+    width: 100%;
+    border-radius: 8px;
+    height: 250px;
+    object-fit: cover;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .register-content {
+        flex-direction: column;
+    }
+
+    .register-form-section,
+    .register-info-section {
+        width: 100%;
+    }
+}
+/* עיצוב לבחירת מגדר */
+.gender-selection .radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.gender-selection .radio-option {
+    flex-basis: calc(50% - 5px);
+    position: relative;
+}
+
+.gender-selection .radio-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.gender-selection .radio-option label {
+    display: block;
+    padding: 10px;
+    border: 1px solid rgba(92, 141, 137, 0.3);
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: normal;
+}
+
+.gender-selection .radio-option input[type="radio"]:checked + label {
+    background-color: var(--accent-dark);
+    color: white;
+    border-color: var(--accent-dark);
+}
+
+.gender-selection .radio-option label:hover {
+    border-color: var(--accent-dark);
+}
+
+@media (max-width: 480px) {
+    .gender-selection .radio-option {
+        flex-basis: 100%;
+    }
+}
+/* עיצוב למודל תנאי שימוש */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: auto;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-body {
+    max-height: 400px;
+    overflow-y: auto;
+    margin: 15px 0;
+    padding: 10px 5px;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-body h4 {
+    color: var(--accent-dark);
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.modal-body p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.accept-terms-btn {
+    background-color: var(--accent-dark);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+}
+
+.accept-terms-btn:hover {
+    background-color: var(--secondary-color);
+}

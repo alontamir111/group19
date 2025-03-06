@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}The Yoga Spot - Find Classes{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('searchClasses.static', filename='css/searchClasses.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="search-container">
+    <h2>Find Your Perfect Class</h2>
+
+    <div class="search-form text-font">
+        <div class="filter-grid">
+            <div class="form-group">
+                <label for="class-type">Class Type</label>
+                <select id="class-type">
+                    <option value="">All Classes</option>
+                    {% for class_type in class_types %}
+                    <option value="{{ class_type.name }}">{{ class_type.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="level">Level</label>
+                <select id="level">
+                    <option value="">All Levels</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                    <option value="all-levels">All Levels</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="time">Time</label>
+                <select id="time">
+                    <option value="">Any Time</option>
+                    <option value="morning">Morning (6:00-12:00)</option>
+                    <option value="afternoon">Afternoon (12:00-17:00)</option>
+                    <option value="evening">Evening (17:00-23:00)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Studio</label>
+                <select id="location">
+                    <option value="">All Locations</option>
+                    {% for studio in studios %}
+                    <option value="{{ studio._id }}">{{ studio.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="instructor">Instructor</label>
+                <select id="instructor">
+                    <option value="">All Instructors</option>
+                    <!-- יהיה מאוכלס דינמית על ידי JavaScript -->
+                </select>
+            </div>
+        </div>
+
+        <button class="search-button">Search Classes</button>
+    </div>
+
+    <div id="searchResults" class="results-grid">
+        <!-- התוצאות יוצגו כאן על ידי JavaScript -->
+        <div class="loading">Loading classes...</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('searchClasses.static', filename='js/searchClasses.js') }}"></script>
+{% endblock %}

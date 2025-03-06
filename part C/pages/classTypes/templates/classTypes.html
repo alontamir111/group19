@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Class Types - The Yoga Spot{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('classTypes.static', filename='css/classTypes.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="classes-container">
+    <div class="classes-hero">
+        <h2>Our Class Types</h2>
+        <p>Discover the perfect class for your yoga journey</p>
+    </div>
+
+    <div class="classes-intro">
+        <p>At The Yoga Spot, we offer a variety of yoga classes to meet the needs of practitioners at all levels. Whether you're looking to build strength, increase flexibility, find inner peace, or simply try something new, we have a class that's right for you.</p>
+    </div>
+
+    <div class="classes-list">
+        {% for class in classes %}
+        <div class="class-card">
+            <div class="class-image">
+                <img src="{{ url_for('static', filename='media/img/' + class.image) }}" alt="{{ class.name }}">
+                <div class="difficulty-badge {{ class.difficulty }}">
+                    {{ class.difficulty | capitalize }}
+                </div>
+                <div class="class-image-overlay">
+                    <span>{{ class.name }}</span>
+                </div>
+            </div>
+            <div class="class-content">
+                <h3>{{ class.name }}</h3>
+                <div class="class-details">
+                    <span><i class="fas fa-clock"></i> {{ class.duration }} minutes</span>
+                </div>
+                <p class="class-description">{{ class.description }}</p>
+
+                {% if class.equipment %}
+                <div class="equipment-section">
+                    <h4>Recommended Equipment</h4>
+                    <ul class="equipment-list">
+                        {% for item in class.equipment %}
+                        <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <div class="recommendations">
+                    <h4>Perfect For</h4>
+                    <p>{{ class.recommendations }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- לוודא שיש מספר זוגי של כרטיסיות גם אם מספר סוגי השיעורים אי-זוגי -->
+        {% if classes|length % 2 != 0 %}
+        <div class="placeholder-card"></div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('classTypes.static', filename='js/classTypes.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,322 @@
+/* searchClasses.css - סגנון לדף חיפוש שיעורים */
+
+.search-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.search-container h2 {
+    text-align: center;
+    color: var(--secondary-color);
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.search-container h2::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 3px;
+    background-color: var(--accent-dark);
+    margin: 1rem auto 0;
+}
+
+/* עיצוב טופס החיפוש */
+.search-form {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--secondary-color);
+}
+
+.form-group select {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    font-family: inherit;
+    color: var(--secondary-color);
+    transition: border-color 0.3s;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="gray" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 1.5rem;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: var(--accent-dark);
+}
+
+.search-button {
+    display: block;
+    width: 200px;
+    margin: 0 auto;
+    padding: 1rem;
+    background-color: var(--accent-dark);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.search-button:hover {
+    background-color: var(--secondary-color);
+}
+
+/* עיצוב תוצאות החיפוש */
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.class-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    animation: slideIn 0.5s ease-out;
+}
+
+.class-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.class-info {
+    padding: 1.5rem;
+    flex-grow: 1;
+}
+
+.class-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.class-header h4 {
+    color: var(--secondary-color);
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+.level-tag {
+    background-color: var(--accent-dark);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.class-details {
+    margin-bottom: 1rem;
+}
+
+.class-details p {
+    margin: 0.5rem 0;
+    color: var(--secondary-color);
+}
+
+.class-details .label {
+    font-weight: bold;
+    display: inline-block;
+    min-width: 100px;
+}
+
+.class-description {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.book-btn, .cancel-btn {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.book-btn {
+    background-color: var(--accent-dark);
+    color: white;
+}
+
+.book-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+.book-btn:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+.cancel-btn {
+    background-color: #ff6b6b;
+    color: white;
+}
+
+.cancel-btn:hover {
+    background-color: #e74c3c;
+}
+
+/* מצבי טעינה ושגיאה */
+.loading, .error-message, .no-results {
+    text-align: center;
+    padding: 2rem;
+    grid-column: 1 / -1;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--secondary-color);
+}
+
+.loading::after {
+    content: "";
+    width: 2rem;
+    height: 2rem;
+    border: 4px solid var(--accent-light);
+    border-top: 4px solid var(--accent-dark);
+    border-radius: 50%;
+    margin-left: 1rem;
+    animation: spin 1s linear infinite;
+}
+
+.error-message {
+    color: #e74c3c;
+}
+
+.no-results {
+    color: var(--secondary-color);
+    font-style: italic;
+}
+
+/* אנימציות */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* תגובתיות למסכים קטנים */
+@media (max-width: 768px) {
+    .filter-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .class-card {
+        margin-bottom: 1rem;
+    }
+
+    .search-button {
+        width: 100%;
+    }
+
+    .class-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .level-tag {
+        margin-top: 0.5rem;
+    }
+
+    .class-details .label {
+        min-width: auto;
+        margin-right: 0.5rem;
+    }
+}
+
+/* התאמות נוספות */
+.notification {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background-color: var(--accent-dark);
+    color: white;
+    padding: 1rem;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transform: translateY(-100%);
+    opacity: 0;
+    animation: slideInNotification 3s ease-out forwards;
+}
+
+@keyframes slideInNotification {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    10% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    90% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+}
+
+.success-notification {
+    background-color: #2ecc71;
+}
+
+.error-notification {
+    background-color: #e74c3c;
+}

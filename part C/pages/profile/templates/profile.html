@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}The Yoga Spot - My Profile{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('profile.static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-tabs">
+        <button class="tab-btn active" data-tab="user-info-tab">Profile Information</button>
+        <button class="tab-btn" data-tab="booked-classes-tab">My Booked Classes</button>
+        <button class="tab-btn" data-tab="contact-requests-tab">My Contact Requests</button>
+    </div>
+    
+    <div id="user-info-tab" class="tab-content active">
+        <div class="user-info">
+            <h2>Profile Information</h2>
+            
+            <div class="info-section">
+                <div class="info-item">
+                    <label>Name:</label>
+                    <span id="userName">{{ user.name }}</span>
+                    <input type="text" id="nameInput" class="edit-input hidden" value="{{ user.name }}" placeholder="First Last">
+                </div>
+                
+                <div class="info-item">
+                    <label>Email:</label>
+                    <span id="userEmail">{{ user.email }}</span>
+                    <input type="email" id="emailInput" class="edit-input hidden" value="{{ user.email }}" placeholder="email@example.com">
+                </div>
+                
+                <div class="info-item">
+                    <label>Phone:</label>
+                    <span id="userPhone">{{ user.phone }}</span>
+                    <input type="tel" id="phoneInput" class="edit-input hidden" value="{{ user.phone }}" placeholder="05X-XXXXXXX">
+                </div>
+                
+                <div class="info-item">
+                    <label>City:</label>
+                    <span id="userCity">{{ user.city }}</span>
+                    <input type="text" id="cityInput" class="edit-input hidden" value="{{ user.city }}" placeholder="Tel Aviv">
+                </div>
+            </div>
+            
+            <div class="button-container">
+                <button id="editBtn" class="action-btn">Edit Profile</button>
+                <button id="saveBtn" class="action-btn hidden">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="booked-classes-tab" class="tab-content">
+        <div class="booked-classes">
+            <h2>My Booked Classes</h2>
+            
+            <div id="bookedClasses" class="results-grid">
+                {% if booked_classes|length > 0 %}
+                    {% for class in booked_classes %}
+                    <div class="class-card {% if class.isPast %}past-class{% endif %}" data-id="{{ class.id }}" data-is-past="{{ class.isPast }}">
+                        <div class="class-info">
+                            <div class="class-header">
+                                <h4>{{ class.className }}</h4>
+                                <span class="class-type-tag">{{ class.classType }}</span>
+                                <span class="level-tag">{{ class.level }}</span>
+                            </div>
+                            <div class="class-details">
+                                <p><span class="label">Instructor:</span> {{ class.instructor }}</p>
+                                <p><span class="label">Date:</span> {{ class.date }}</p>
+                                <p><span class="label">Time:</span> {{ class.time }}</p>
+                                <p><span class="label">Duration:</span> {{ class.duration }} minutes</p>
+                                <p><span class="label">Location:</span> {{ class.studio }}</p>
+                                <p><span class="label">Price:</span> ₪{{ class.price }}</p>
+                            </div>
+                            {% if class.description %}
+                            <div class="class-description">{{ class.description }}</div>
+                            {% endif %}
+                        </div>
+                        {% if not class.isPast %}
+                        <button class="cancel-btn cancel-booking-btn" data-id="{{ class.id }}">Cancel Booking</button>
+                        {% else %}
+                        <button class="past-class-btn" disabled>Class Already Passed</button>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-classes">No booked classes yet</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div id="contact-requests-tab" class="tab-content">
+        <div class="contact-requests">
+            <h2>My Contact Requests</h2>
+            
+            <div id="contactRequests" class="requests-list">
+                {% if contact_requests|length > 0 %}
+                    {% for request in contact_requests %}
+                    <div class="request-card" data-id="{{ request.id }}">
+                        <div class="request-info">
+                            <div class="request-header">
+                                <h4>{{ request.subject }}</h4>
+                                <span class="request-date">{{ request.date }}</span>
+                            </div>
+                            <div class="request-message">
+                                {{ request.message }}
+                            </div>
+                        </div>
+                        <button class="delete-btn delete-request-btn" data-id="{{ request.id }}">Delete Request</button>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-requests">No contact requests yet</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('profile.static', filename='js/profile.js') }}"></script>
+{% endblock %}

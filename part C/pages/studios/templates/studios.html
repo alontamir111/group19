@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Our Studios - The Yoga Spot{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('studios.static', filename='css/studios.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="studios-container">
+    <div class="studios-hero">
+        <h2>Our Studios</h2>
+        <p>Discover our peaceful spaces designed for your practice</p>
+    </div>
+    
+    <div class="studios-intro">
+        <p>At The Yoga Spot, we've created serene environments where you can disconnect from the outside world and focus on your practice. Each of our studios is thoughtfully designed to provide comfort, inspiration, and the perfect atmosphere for yoga.</p>
+    </div>
+    
+    <div class="studios-list">
+        {% for studio in studios %}
+        <div class="studio-card">
+            <div class="studio-image">
+                <img src="{{ url_for('static', filename='media/img/' + studio.image) }}" alt="{{ studio.name }}">
+                <div class="studio-image-overlay">
+                    <span>{{ studio.name }}</span>
+                </div>
+            </div>
+            <div class="studio-content">
+                <h3>{{ studio.name }}</h3>
+                <div class="studio-info">
+                    <p><i class="fas fa-map-marker-alt"></i> {{ studio.address }}</p>
+                    <p><i class="fas fa-phone"></i> {{ studio.phone }}</p>
+                </div>
+                <p class="studio-description">{{ studio.description }}</p>
+
+                <h4>Amenities</h4>
+                <ul class="amenities-list">
+                    {% for amenity in studio.amenities %}
+                    <li>{{ amenity }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="facilities-section">
+        <h3>Our Facilities</h3>
+        <div class="facilities-grid">
+            {% for facility in facilities %}
+            <div class="facility-item">
+                <img src="{{ url_for('static', filename='media/img/' + facility.image) }}" alt="{{ facility.name }}">
+                <div class="facility-content">
+                    <h4>{{ facility.name }}</h4>
+                    <p>{{ facility.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('studios.static', filename='js/studios.js') }}"></script>
+{% endblock %}

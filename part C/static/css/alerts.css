@@ -1,0 +1,170 @@
+/* עיצוב מעודכן להתראות */
+.alert-popup {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    padding: 0;
+    z-index: 1000;
+    min-width: 320px;
+    max-width: 400px;
+    text-align: center;
+    overflow: hidden;
+    font-family: 'Reborn', Arial, sans-serif;
+    animation: slideDown 0.3s ease-out;
+}
+
+.alert-popup .alert-header {
+    padding: 12px 15px;
+    font-weight: bold;
+    font-size: 18px;
+    color: white;
+}
+
+.alert-popup.success .alert-header {
+    background-color: var(--accent-dark, #5C8D89);
+}
+
+.alert-popup.error .alert-header {
+    background-color: #dc3545;
+}
+
+.alert-popup .alert-content {
+    padding: 15px;
+    font-size: 16px;
+}
+
+.alert-popup .alert-actions {
+    padding: 10px 15px;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid #eee;
+}
+
+.alert-popup .alert-button {
+    background-color: var(--accent-dark, #5C8D89);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 20px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.alert-popup .alert-button:hover {
+    background-color: #4a766e;
+}
+
+.alert-popup.error .alert-button {
+    background-color: #dc3545;
+}
+
+.alert-popup.error .alert-button:hover {
+    background-color: #c82333;
+}
+
+/* אנימציות */
+@keyframes slideDown {
+    from { top: -100px; opacity: 0; }
+    to { top: 20px; opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* עיצוב כפתורים */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--accent-dark, #5C8D89);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #4a766e;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+/* עיצוב כפתורי הרשמה וביטול */
+.book-btn {
+    background-color: var(--accent-dark, #5C8D89);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 0;
+    width: 100%;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.book-btn:hover {
+    background-color: #4a766e;
+}
+
+.book-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.cancel-btn, .cancel-booking-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 0;
+    width: 100%;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn:hover, .cancel-booking-btn:hover {
+    background-color: #c82333;
+}
+
+.cancel-booking-btn[disabled] {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* תיוג שיעורים שעברו */
+.past-class-tag {
+    background-color: #6c757d;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-bottom: 8px;
+    display: inline-block;
+}

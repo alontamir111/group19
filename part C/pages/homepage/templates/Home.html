@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - The Yoga Spot{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('homepage.static', filename='css/Home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="home-container">
+    <!-- Hero Section -->
+    <div class="main-content-background">
+        <div class="main-content">
+            <div class="hero-text">
+                <h2>Transform Your Body, Transform Your Life</h2>
+                <p>Join our premium yoga studios and discover your strongest self.</p>
+                <a href="/searchClasses" class="cta-button">Find Classes</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Studios Section -->
+    <div class="box" id="studios">
+        <div class="section-title">
+            <h3>Our Studios</h3>
+        </div>
+        <div class="container">
+            <div class="section-content">
+                <p>Welcome to The Yoga Spot, where we believe in the power of movement.</p>
+                <p>Our state-of-the-art studios provide the perfect environment for your fitness journey.</p>
+                <a href="/studios" class="section-link">Explore Our Studios</a>
+            </div>
+            <div class="section-image">
+                <img src="{{ url_for('static', filename='media/img/YogaStudio.jpg') }}" alt="Studio Interior">
+                <div class="image-overlay">
+                    <span>Premium Facilities</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Classes Section -->
+    <div class="box" id="classes">
+        <div class="section-title">
+            <h3>Our Classes</h3>
+        </div>
+        <div class="container">
+            <div class="section-content">
+                <ul>
+                    <li>Vinyasa Flow - Dynamic sequences linking breath with movement</li>
+                    <li>Hatha Yoga - Perfect foundation for beginners</li>
+                    <li>Power Yoga - High-intensity, strength-focused practice</li>
+                    <li>Yin Yoga - Improves flexibility and promotes deep relaxation</li>
+                    <li>Meditation & Breathing - Calms the mind and reduces stress</li>
+                </ul>
+                <a href="/classes" class="section-link">Discover All Classes</a>
+            </div>
+            <div class="section-image">
+                <img src="{{ url_for('static', filename='media/img/YogaClass.jpg') }}" alt="Yoga Class">
+                <div class="image-overlay">
+                    <span>Expert Instructors</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="box" id="contact">
+        <div class="section-title">
+            <h3>Get In Touch</h3>
+        </div>
+        <div class="container">
+            <div class="section-content">
+                <p>Ready to start your fitness journey? Contact us:</p>
+                <p><i class="fas fa-envelope"></i>Email: info@theyogaspot.com</p>
+                <p><i class="fas fa-phone"></i>Phone: 03-1234567</p>
+                <p><i class="fas fa-map-marker-alt"></i>123 Dizengoff Street, Tel Aviv</p>
+                <a href="/contact" class="section-link">Contact Us</a>
+            </div>
+            <div class="section-image">
+                <img src="{{ url_for('static', filename='media/img/ContactUs.png') }}" alt="Contact Us">
+                <div class="image-overlay">
+                    <span>We're Here For You</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- כאן תוכל להוסיף סקריפטים ספציפיים לדף הבית -->
+{% endblock %}

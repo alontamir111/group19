@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}The Yoga Spot - Register{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('register.static', filename='css/register.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="register-container">
+    <h2>Create Account</h2>
+
+    <div class="msg"></div>
+
+    <form id="registrationForm" method="POST" action="{{ url_for('register.register') }}">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" required>
+                <div class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" required>
+                <div class="error-message"></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+            <div class="error-message"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="05X-XXXXXXX" required>
+            <div class="error-message"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" required>
+            <div class="error-message"></div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <div class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <div class="error-message"></div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" id="age" name="age" min="16" max="120" required>
+                <div class="error-message"></div>
+            </div>
+
+            <div class="form-group gender-selection">
+                <label>Gender</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="gender-male" name="gender" value="male" required>
+                        <label for="gender-male">Male</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="gender-female" name="gender" value="female">
+                        <label for="gender-female">Female</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="gender-other" name="gender" value="other">
+                        <label for="gender-other">Other</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="gender-prefer-not" name="gender" value="prefer-not-to-say">
+                        <label for="gender-prefer-not">Prefer not to say</label>
+                    </div>
+                </div>
+                <div class="error-message"></div>
+            </div>
+        </div>
+
+        <div class="form-group checkbox">
+            <input type="checkbox" id="terms" name="terms" required>
+            <label for="terms">I agree to the <a href="#" class="terms-link">Terms and Conditions</a></label>
+            <div class="error-message"></div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="submit-btn">Register</button>
+        </div>
+
+        <div class="form-footer">
+            <p>Already have an account? <a href="{{ url_for('signin.login') }}">Sign In</a></p>
+        </div>
+    </form>
+</div>
+<!-- Modal לתנאי השימוש -->
+<div id="termsModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Terms and Conditions</h3>
+        <div class="modal-body">
+            <h4>1. Acceptance of Terms</h4>
+            <p>By accessing and using The Yoga Spot services, you agree to be bound by these Terms and Conditions.</p>
+
+            <h4>2. User Registration</h4>
+            <p>When you register for an account, you agree to provide accurate and complete information.</p>
+
+            <h4>3. Class Bookings and Cancellations</h4>
+            <p>Users may book classes subject to availability. Cancellations must be made at least 24 hours before the scheduled class time.</p>
+
+            <h4>4. Payment and Refunds</h4>
+            <p>All payments are processed securely. Refunds are provided in accordance with our refund policy.</p>
+
+            <h4>5. Privacy</h4>
+            <p>Your personal information is collected and used in accordance with our Privacy Policy.</p>
+
+            <h4>6. Limitation of Liability</h4>
+            <p>The Yoga Spot is not liable for any injuries or damages that may occur during yoga classes.</p>
+        </div>
+        <button id="acceptTerms" class="accept-terms-btn">Accept Terms</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('register.static', filename='js/register.js') }}"></script>
+{% endblock %}

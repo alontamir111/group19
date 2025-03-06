@@ -1,0 +1,347 @@
+/* home.css */
+.home-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Hero Section */
+.main-content-background {
+    text-align: center;
+    padding: 6rem 2rem;
+    background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+                url('/static/media/img/yoga-hero-bg.jpg') center/cover no-repeat;
+    border-radius: 10px;
+    margin-bottom: 3rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.main-content {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-text {
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 3rem;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 1s ease-in-out;
+}
+
+.main-content h2 {
+    color: var(--secondary-color);
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+.main-content h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: var(--accent-dark);
+}
+
+.main-content p {
+    color: var(--accent-dark);
+    font-size: 1.4rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: var(--accent-dark);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cta-button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Box Sections */
+.box {
+    background-color: var(--accent-light);
+    border-radius: 10px;
+    padding: 3rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.box:hover {
+    transform: translateY(-5px);
+}
+
+/* Section Titles */
+.section-title {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.section-title h3 {
+    color: var(--secondary-color);
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 1rem;
+    display: inline-block;
+}
+
+.section-title h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: var(--accent-dark);
+}
+
+/* Container and Content */
+.container {
+    display: flex;
+    gap: 4rem;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-content {
+    flex: 1;
+}
+
+.section-content p {
+    color: var(--secondary-color);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+.section-link {
+    display: inline-block;
+    color: var(--accent-dark);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.5rem 0;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.section-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--accent-dark);
+    transition: width 0.3s ease;
+}
+
+.section-link:hover {
+    color: var(--secondary-color);
+}
+
+.section-link:hover::after {
+    width: 100%;
+}
+
+/* Lists */
+.section-content ul {
+    list-style: none;
+    margin-bottom: 2rem;
+}
+
+.section-content ul li {
+    color: var(--secondary-color);
+    padding: 0.8rem 0;
+    padding-left: 1.8rem;
+    position: relative;
+    font-size: 1.1rem;
+}
+
+.section-content ul li::before {
+    content: "✦";
+    position: absolute;
+    left: 0;
+    color: var(--accent-dark);
+}
+
+/* Images */
+.section-image {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.section-image img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.5s ease;
+}
+
+.section-image:hover img {
+    transform: scale(1.05);
+}
+
+.image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    padding: 1.5rem;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.section-image:hover .image-overlay {
+    opacity: 1;
+}
+
+.image-overlay span {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* Contact Section */
+#contact {
+    text-align: left;
+}
+
+#contact .section-content p {
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#contact .section-content i {
+    color: var(--accent-dark);
+    font-size: 1.4rem;
+    width: 24px;
+    text-align: center;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .home-container {
+        padding: 0 1.5rem;
+    }
+
+    .main-content h2 {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .container {
+        gap: 3rem;
+    }
+
+    .section-image img {
+        height: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .home-container {
+        padding: 0 1rem;
+    }
+
+    .main-content-background {
+        padding: 4rem 1rem;
+    }
+
+    .hero-text {
+        padding: 2rem 1.5rem;
+    }
+
+    .main-content h2 {
+        font-size: 2.2rem;
+    }
+
+    .main-content p {
+        font-size: 1.2rem;
+    }
+
+    .box {
+        padding: 2rem;
+    }
+
+    .container {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .section-content {
+        text-align: center;
+    }
+
+    .section-content ul li {
+        text-align: left;
+    }
+
+    .section-image img {
+        height: 250px;
+    }
+}
+
+@media (max-width: 576px) {
+    .main-content h2 {
+        font-size: 1.8rem;
+    }
+
+    .main-content p {
+        font-size: 1.1rem;
+    }
+
+    .cta-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+.header-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.header-link:hover {
+    color: inherit;
+}

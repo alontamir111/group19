@@ -1,0 +1,21 @@
+<header>
+    <div>
+        <a href="{{ url_for('homepage.index') }}" class="header-link">
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='Photos/Logo.png') }}" alt="The Yoga Spot Logo" width="200">
+            </div>
+            <h1 class="title-font main-title">THE YOGA SPOT</h1>
+            <p class="subtitle">YOGA LESSONS FOR EVERYONE</p>
+        </a>
+        <nav class="text-font flex-navbar" id="mainNav">
+            <!-- קישורים קבועים שתמיד יופיעו -->
+            <a href="{{ url_for('homepage.index') }}" {% if request.path == url_for('homepage.index') %}class="active"{% endif %}>Home</a>
+            <a href="{{ url_for('class_types.index') }}" {% if request.path == url_for('class_types.index') %}class="active"{% endif %}>Classes</a>
+            <a href="{{ url_for('studios.index') }}" {% if request.path == url_for('studios.index') %}class="active"{% endif %}>Our Studios</a>
+            <a href="{{ url_for('about_us.index') }}" {% if request.path == url_for('about_us.index') %}class="active"{% endif %}>About</a>
+            <a href="{{ url_for('contact_us.index') }}" {% if request.path == url_for('contact_us.index') %}class="active"{% endif %}>Contact</a>
+            <a href="{{ url_for('login.index') }}" {% if request.path == url_for('login.index') %}class="active"{% endif %}>Login</a>
+            <a href="{{ url_for('register.index') }}" {% if request.path == url_for('register.index') %}class="active"{% endif %}>Sign Up</a>
+        </nav>
+    </div>
+</header>

@@ -1,0 +1,169 @@
+/* Login.css */
+.login-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.login-content {
+    display: flex;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.login-form-section {
+    flex: 1;
+    padding: 2.5rem;
+    background-color: var(--accent-light);
+}
+
+.login-form-section h2 {
+    color: var(--secondary-color);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.login-form-section > p {
+    color: var(--accent-dark);
+    margin-bottom: 2rem;
+}
+
+.login-form {
+    margin-top: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid rgba(92, 141, 137, 0.3);
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--accent-dark);
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+}
+
+.remember-me input {
+    margin-right: 0.5rem;
+}
+
+.forgot-password {
+    color: var(--accent-dark);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.submit-btn {
+    background-color: var(--accent-dark);
+    color: var(--accent-light);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+.submit-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+.register-link {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.register-link a {
+    color: var(--accent-dark);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+/* Image Section */
+.login-image-section {
+    flex: 1;
+    background-image: url('/static/media/img/yin-yoga.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(42, 71, 71, 0.6);
+}
+
+.login-quote {
+    position: relative;
+    color: white;
+    text-align: center;
+    padding: 0 2rem;
+    max-width: 80%;
+}
+
+.login-quote h3 {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+.login-quote p {
+    font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .login-content {
+        flex-direction: column;
+    }
+
+    .login-image-section {
+        min-height: 250px;
+    }
+}

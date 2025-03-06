@@ -1,0 +1,314 @@
+/* classes.css - עיצוב דף סוגי שיעורים */
+.classes-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.classes-hero {
+    text-align: center;
+    padding: 5rem 2rem;
+    margin-bottom: 4rem;
+    background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+                url('/static/media/img/YogaStudio.jpg') center/cover no-repeat;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.classes-hero h2 {
+    color: var(--secondary-color);
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 1rem;
+}
+
+.classes-hero h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: var(--accent-dark);
+}
+
+.classes-hero p {
+    color: var(--accent-dark);
+    font-size: 1.4rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.classes-intro {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto 4rem;
+}
+
+.classes-intro p {
+    color: var(--secondary-color);
+    line-height: 1.8;
+    font-size: 1.2rem;
+}
+
+/* סידור סימטרי של כרטיסיות השיעורים */
+.classes-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 3rem;
+    margin-bottom: 4rem;
+}
+
+@media (min-width: 1200px) {
+    .classes-list {
+        grid-template-columns: repeat(2, 1fr); /* תמיד שתי כרטיסיות בשורה במסכים גדולים */
+    }
+}
+
+@media (min-width: 1600px) {
+    .classes-list {
+        grid-template-columns: repeat(3, 1fr); /* שלוש כרטיסיות בשורה במסכים מאוד גדולים */
+    }
+}
+
+.class-card {
+    background-color: var(--accent-light);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transform: translateY(50px);
+    opacity: 0;
+    transition: transform 0.5s ease, opacity 0.5s ease, box-shadow 0.3s ease;
+}
+
+.class-card.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.class-card:hover {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
+
+/* כרטיסייה ריקה לשמירה על סימטריה */
+.placeholder-card {
+    height: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+}
+
+.class-image {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+}
+
+.class-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.class-card:hover .class-image img {
+    transform: scale(1.05);
+}
+
+.difficulty-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: white;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.difficulty-badge.beginner {
+    background-color: #4CAF50;
+}
+
+.difficulty-badge.intermediate {
+    background-color: #FFC107;
+}
+
+.difficulty-badge.advanced {
+    background-color: #F44336;
+}
+
+.difficulty-badge.all-levels {
+    background-color: #2196F3;
+}
+
+.class-image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    padding: 1.5rem;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.class-image:hover .class-image-overlay {
+    opacity: 1;
+}
+
+.class-image-overlay span {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.class-content {
+    padding: 2rem;
+}
+
+.class-content h3 {
+    color: var(--secondary-color);
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    position: relative;
+    padding-bottom: 0.8rem;
+    display: inline-block;
+}
+
+.class-content h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: var(--accent-dark);
+}
+
+.class-details {
+    display: flex;
+    align-items: center;
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.class-details span {
+    display: flex;
+    align-items: center;
+    margin-right: 1.5rem;
+}
+
+.class-details i {
+    color: var(--accent-dark);
+    margin-right: 0.5rem;
+}
+
+.class-description {
+    color: var(--secondary-color);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.equipment-section,
+.recommendations {
+    margin-bottom: 2rem;
+}
+
+.class-content h4 {
+    color: var(--secondary-color);
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+}
+
+.equipment-list {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.equipment-list li {
+    background-color: rgba(92, 141, 137, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.equipment-list li:hover {
+    background-color: rgba(92, 141, 137, 0.2);
+    transform: translateY(-3px);
+}
+
+.recommendations p {
+    color: var(--secondary-color);
+    line-height: 1.7;
+    font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .classes-list {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .classes-hero {
+        padding: 4rem 1.5rem;
+    }
+
+    .classes-hero h2 {
+        font-size: 2.2rem;
+    }
+
+    .classes-hero p {
+        font-size: 1.1rem;
+    }
+
+    .classes-intro p {
+        font-size: 1.1rem;
+    }
+
+    .class-content {
+        padding: 1.5rem;
+    }
+
+    .class-content h3 {
+        font-size: 1.6rem;
+    }
+
+    .class-description {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .classes-list {
+        grid-template-columns: 1fr;
+    }
+
+    .class-image {
+        height: 200px;
+    }
+
+    .equipment-list {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .equipment-list li {
+        display: inline-block;
+    }
+}
