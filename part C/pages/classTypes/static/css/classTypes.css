@@ -1,4 +1,4 @@
-/* classes.css - עיצוב דף סוגי שיעורים */
+/* classes.css  */
 .classes-container {
     max-width: 1400px;
     margin: 0 auto;
@@ -54,23 +54,23 @@
     font-size: 1.2rem;
 }
 
-/* סידור סימטרי של כרטיסיות השיעורים */
+/* Symmetric arrangement of class cards */
 .classes-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Changed from 400px to 300px */
     gap: 3rem;
     margin-bottom: 4rem;
 }
 
 @media (min-width: 1200px) {
     .classes-list {
-        grid-template-columns: repeat(2, 1fr); /* תמיד שתי כרטיסיות בשורה במסכים גדולים */
+        grid-template-columns: repeat(2, 1fr); /* Always two cards per row on large screens */
     }
 }
 
 @media (min-width: 1600px) {
     .classes-list {
-        grid-template-columns: repeat(3, 1fr); /* שלוש כרטיסיות בשורה במסכים מאוד גדולים */
+        grid-template-columns: repeat(3, 1fr); /* Three cards per row on very large screens */
     }
 }
 
@@ -82,6 +82,7 @@
     transform: translateY(50px);
     opacity: 0;
     transition: transform 0.5s ease, opacity 0.5s ease, box-shadow 0.3s ease;
+    width: 100%; /* Ensure full width */
 }
 
 .class-card.visible {
@@ -94,7 +95,7 @@
     transform: translateY(-5px);
 }
 
-/* כרטיסייה ריקה לשמירה על סימטריה */
+/* Empty card placeholder for symmetry */
 .placeholder-card {
     height: 0;
     margin: 0;
@@ -257,10 +258,17 @@
     font-size: 1rem;
 }
 
+/* Prevent overflow on small screens */
+.class-card * {
+    max-width: 100%;
+    overflow-wrap: break-word;
+}
+
 /* Responsive */
 @media (max-width: 992px) {
     .classes-list {
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2.5rem;
     }
 }
 
@@ -292,11 +300,16 @@
     .class-description {
         font-size: 1rem;
     }
+
+    .classes-container {
+        padding: 1.5rem;
+    }
 }
 
 @media (max-width: 576px) {
     .classes-list {
         grid-template-columns: 1fr;
+        gap: 2.5rem;
     }
 
     .class-image {
@@ -310,5 +323,64 @@
 
     .equipment-list li {
         display: inline-block;
+    }
+
+    .classes-hero {
+        padding: 3.5rem 1.2rem;
+        margin-bottom: 3rem;
+    }
+
+    .classes-hero h2 {
+        font-size: 2rem;
+    }
+}
+
+/* Added: Media query for very small screens */
+@media (max-width: 400px) {
+    .classes-list {
+        gap: 2rem;
+    }
+
+    .classes-container {
+        padding: 1rem;
+    }
+
+    .classes-hero {
+        padding: 3rem 1rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .classes-hero h2 {
+        font-size: 1.8rem;
+    }
+
+    .classes-hero p {
+        font-size: 1rem;
+    }
+
+    .class-content {
+        padding: 1.2rem;
+    }
+
+    .class-content h3 {
+        font-size: 1.4rem;
+    }
+
+    .class-details {
+        font-size: 0.9rem;
+        flex-wrap: wrap;
+    }
+
+    .class-details span {
+        margin-bottom: 0.5rem;
+    }
+
+    .class-image {
+        height: 180px;
+    }
+
+    .difficulty-badge {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
     }
 }

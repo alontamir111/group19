@@ -1,288 +1,293 @@
-// register.js - JavaScript for registration form validation
+// register.js
 document.addEventListener('DOMContentLoaded', () => {
-    const registrationForm = document.getElementById('registrationForm');
-    const msgDiv = document.querySelector('.msg');
+   const registrationForm = document.getElementById('registrationForm');
+   const msgDiv = document.querySelector('.msg');
 
-    // Form inputs
-    const firstNameInput = document.getElementById('firstName');
-    const lastNameInput = document.getElementById('lastName');
-    const emailInput = document.getElementById('email');
-    const phoneInput = document.getElementById('phone');
-    const cityInput = document.getElementById('city');
-    const passwordInput = document.getElementById('password');
-    const confirmPasswordInput = document.getElementById('confirmPassword');
-    const ageInput = document.getElementById('age');
-    // Changed from select element to radio buttons group
-    const genderRadios = document.querySelectorAll('input[name="gender"]');
-    const termsCheckbox = document.getElementById('terms');
+   // Form inputs
+   const firstNameInput = document.getElementById('firstName');
+   const lastNameInput = document.getElementById('lastName');
+   const emailInput = document.getElementById('email');
+   const phoneInput = document.getElementById('phone');
+   const cityInput = document.getElementById('city');
+   const passwordInput = document.getElementById('password');
+   const confirmPasswordInput = document.getElementById('confirmPassword');
+   const ageInput = document.getElementById('age');
+   // Changed from select element to radio buttons group
+   const genderRadios = document.querySelectorAll('input[name="gender"]');
+   const termsCheckbox = document.getElementById('terms');
 
-    // Flash messages handling (from server)
-    const flashMessages = document.querySelectorAll('.flash-message');
-    if (flashMessages.length > 0) {
-        // Auto-hide flash messages after 5 seconds
-        setTimeout(() => {
-            flashMessages.forEach(msg => {
-                msg.style.display = 'none';
-            });
-        }, 5000);
-    }
+   // Flash messages handling (from server)
+   const flashMessages = document.querySelectorAll('.flash-message');
+   if (flashMessages.length > 0) {
+       // Auto-hide flash messages after 5 seconds
+       setTimeout(() => {
+           flashMessages.forEach(msg => {
+               msg.style.display = 'none';
+           });
+       }, 5000);
+   }
 
-    // Add form submit handler
-    if (registrationForm) {
-        registrationForm.addEventListener('submit', (e) => {
-            if (!validateForm()) {
-                e.preventDefault();
-            }
-        });
+   // Add form submit handler
+   if (registrationForm) {
+       registrationForm.addEventListener('submit', (e) => {
+           // הסרת מקפים ממספר הטלפון לפני שליחה לשרת
+           if (phoneInput && phoneInput.value) {
+               phoneInput.value = phoneInput.value.replace(/-/g, '');
+           }
 
-        // Add real-time validation to inputs
-        firstNameInput.addEventListener('input', () => validateName(firstNameInput, 'First name'));
-        lastNameInput.addEventListener('input', () => validateName(lastNameInput, 'Last name'));
-        emailInput.addEventListener('input', validateEmail);
-        phoneInput.addEventListener('input', validatePhone);
-        cityInput.addEventListener('input', validateCity);
-        passwordInput.addEventListener('input', validatePassword);
-        confirmPasswordInput.addEventListener('input', validateConfirmPassword);
-        ageInput.addEventListener('input', validateAge);
+           if (!validateForm()) {
+               e.preventDefault();
+           }
+       });
 
-        // Changed from select listener to radio buttons listeners
-        genderRadios.forEach(radio => {
-            radio.addEventListener('change', validateGender);
-        });
+       // Add real-time validation to inputs
+       firstNameInput.addEventListener('input', () => validateName(firstNameInput, 'First name'));
+       lastNameInput.addEventListener('input', () => validateName(lastNameInput, 'Last name'));
+       emailInput.addEventListener('input', validateEmail);
+       phoneInput.addEventListener('input', validatePhone);
+       cityInput.addEventListener('input', validateCity);
+       passwordInput.addEventListener('input', validatePassword);
+       confirmPasswordInput.addEventListener('input', validateConfirmPassword);
+       ageInput.addEventListener('input', validateAge);
 
-        termsCheckbox.addEventListener('change', validateTerms);
-    }
+       // Changed from select listener to radio buttons listeners
+       genderRadios.forEach(radio => {
+           radio.addEventListener('change', validateGender);
+       });
 
-    function validateForm() {
-        let isValid = true;
+       termsCheckbox.addEventListener('change', validateTerms);
+   }
 
-        // Validate all fields
-        if (!validateName(firstNameInput, 'First name')) isValid = false;
-        if (!validateName(lastNameInput, 'Last name')) isValid = false;
-        if (!validateEmail()) isValid = false;
-        if (!validatePhone()) isValid = false;
-        if (!validateCity()) isValid = false;
-        if (!validatePassword()) isValid = false;
-        if (!validateConfirmPassword()) isValid = false;
-        if (!validateAge()) isValid = false;
-        if (!validateGender()) isValid = false;
-        if (!validateTerms()) isValid = false;
+   function validateForm() {
+       let isValid = true;
 
-        return isValid;
-    }
+       // Validate all fields
+       if (!validateName(firstNameInput, 'First name')) isValid = false;
+       if (!validateName(lastNameInput, 'Last name')) isValid = false;
+       if (!validateEmail()) isValid = false;
+       if (!validatePhone()) isValid = false;
+       if (!validateCity()) isValid = false;
+       if (!validatePassword()) isValid = false;
+       if (!validateConfirmPassword()) isValid = false;
+       if (!validateAge()) isValid = false;
+       if (!validateGender()) isValid = false;
+       if (!validateTerms()) isValid = false;
 
-    function validateName(input, fieldName) {
-        const name = input.value.trim();
-        const errorElement = input.nextElementSibling;
+       return isValid;
+   }
 
-        if (!name) {
-            showError(input, errorElement, `${fieldName} is required`);
-            return false;
-        }
+   function validateName(input, fieldName) {
+       const name = input.value.trim();
+       const errorElement = input.nextElementSibling;
 
-        if (name.length < 3) {
-            showError(input, errorElement, `${fieldName} must be at least 3 characters`);
-            return false;
-        }
+       if (!name) {
+           showError(input, errorElement, `${fieldName} is required`);
+           return false;
+       }
 
-        clearError(input, errorElement);
-        return true;
-    }
+       if (name.length < 3) {
+           showError(input, errorElement, `${fieldName} must be at least 3 characters`);
+           return false;
+       }
 
-    function validateEmail() {
-        const email = emailInput.value.trim();
-        const errorElement = emailInput.nextElementSibling;
+       clearError(input, errorElement);
+       return true;
+   }
 
-        if (!email) {
-            showError(emailInput, errorElement, 'Email is required');
-            return false;
-        }
+   function validateEmail() {
+       const email = emailInput.value.trim();
+       const errorElement = emailInput.nextElementSibling;
 
-        if (!isValidEmail(email)) {
-            showError(emailInput, errorElement, 'Please enter a valid email address');
-            return false;
-        }
+       if (!email) {
+           showError(emailInput, errorElement, 'Email is required');
+           return false;
+       }
 
-        clearError(emailInput, errorElement);
-        return true;
-    }
+       if (!isValidEmail(email)) {
+           showError(emailInput, errorElement, 'Please enter a valid email address');
+           return false;
+       }
 
-    function validatePhone() {
-        const phone = phoneInput.value.trim();
-        const errorElement = phoneInput.nextElementSibling;
+       clearError(emailInput, errorElement);
+       return true;
+   }
 
-        if (!phone) {
-            showError(phoneInput, errorElement, 'Phone number is required');
-            return false;
-        }
+   function validatePhone() {
+       const phone = phoneInput.value.trim();
+       const errorElement = phoneInput.nextElementSibling;
 
-        // Israeli phone format validation (05X-XXXXXXX or 05XXXXXXXX)
-        const phoneRegex = /^05\d(-?\d{7})$/;
-        if (!phoneRegex.test(phone.replace('-', ''))) {
-            showError(phoneInput, errorElement, 'Please enter a valid Israeli phone number');
-            return false;
-        }
+       if (!phone) {
+           showError(phoneInput, errorElement, 'Phone number is required');
+           return false;
+       }
 
-        clearError(phoneInput, errorElement);
-        return true;
-    }
+       // Israeli phone format validation (05X-XXXXXXX or 05XXXXXXXX)
+       const phoneRegex = /^05\d(-?\d{7})$/;
+       if (!phoneRegex.test(phone.replace('-', ''))) {
+           showError(phoneInput, errorElement, 'Please enter a valid Israeli phone number');
+           return false;
+       }
 
-    function validateCity() {
-        const city = cityInput.value.trim();
-        const errorElement = cityInput.nextElementSibling;
+       clearError(phoneInput, errorElement);
+       return true;
+   }
 
-        if (!city) {
-            showError(cityInput, errorElement, 'City is required');
-            return false;
-        }
+   function validateCity() {
+       const city = cityInput.value.trim();
+       const errorElement = cityInput.nextElementSibling;
 
-        clearError(cityInput, errorElement);
-        return true;
-    }
+       if (!city) {
+           showError(cityInput, errorElement, 'City is required');
+           return false;
+       }
 
-    function validatePassword() {
-        const password = passwordInput.value;
-        const errorElement = passwordInput.nextElementSibling;
+       clearError(cityInput, errorElement);
+       return true;
+   }
 
-        if (!password) {
-            showError(passwordInput, errorElement, 'Password is required');
-            return false;
-        }
+   function validatePassword() {
+       const password = passwordInput.value;
+       const errorElement = passwordInput.nextElementSibling;
 
-        if (password.length < 6) {
-            showError(passwordInput, errorElement, 'Password must be at least 6 characters');
-            return false;
-        }
+       if (!password) {
+           showError(passwordInput, errorElement, 'Password is required');
+           return false;
+       }
 
-        clearError(passwordInput, errorElement);
-        return true;
-    }
+       if (password.length < 6) {
+           showError(passwordInput, errorElement, 'Password must be at least 6 characters');
+           return false;
+       }
 
-    function validateConfirmPassword() {
-        const confirmPassword = confirmPasswordInput.value;
-        const password = passwordInput.value;
-        const errorElement = confirmPasswordInput.nextElementSibling;
+       clearError(passwordInput, errorElement);
+       return true;
+   }
 
-        if (!confirmPassword) {
-            showError(confirmPasswordInput, errorElement, 'Please confirm your password');
-            return false;
-        }
+   function validateConfirmPassword() {
+       const confirmPassword = confirmPasswordInput.value;
+       const password = passwordInput.value;
+       const errorElement = confirmPasswordInput.nextElementSibling;
 
-        if (confirmPassword !== password) {
-            showError(confirmPasswordInput, errorElement, 'Passwords do not match');
-            return false;
-        }
+       if (!confirmPassword) {
+           showError(confirmPasswordInput, errorElement, 'Please confirm your password');
+           return false;
+       }
 
-        clearError(confirmPasswordInput, errorElement);
-        return true;
-    }
+       if (confirmPassword !== password) {
+           showError(confirmPasswordInput, errorElement, 'Passwords do not match');
+           return false;
+       }
 
-    function validateAge() {
-        const age = ageInput.value;
-        const errorElement = ageInput.nextElementSibling;
+       clearError(confirmPasswordInput, errorElement);
+       return true;
+   }
 
-        if (!age) {
-            showError(ageInput, errorElement, 'Age is required');
-            return false;
-        }
+   function validateAge() {
+       const age = ageInput.value;
+       const errorElement = ageInput.nextElementSibling;
 
-        const ageNum = parseInt(age);
-        if (isNaN(ageNum) || ageNum < 16 || ageNum > 120) {
-            showError(ageInput, errorElement, 'Age must be between 16 and 120');
-            return false;
-        }
+       if (!age) {
+           showError(ageInput, errorElement, 'Age is required');
+           return false;
+       }
 
-        clearError(ageInput, errorElement);
-        return true;
-    }
+       const ageNum = parseInt(age);
+       if (isNaN(ageNum) || ageNum < 16 || ageNum > 120) {
+           showError(ageInput, errorElement, 'Age must be between 16 and 120');
+           return false;
+       }
 
-    function validateGender() {
-        // Changed from select validation to radio buttons validation
-        const selectedGender = document.querySelector('input[name="gender"]:checked');
-        // We need to find the error element - it's located after the radio buttons group
-        const errorElement = document.querySelector('.gender-selection .error-message');
+       clearError(ageInput, errorElement);
+       return true;
+   }
 
-        if (!selectedGender) {
-            showError(document.querySelector('.radio-group'), errorElement, 'Please select a gender');
-            return false;
-        }
+   function validateGender() {
+       // Changed from select validation to radio buttons validation
+       const selectedGender = document.querySelector('input[name="gender"]:checked');
+       // We need to find the error element - it's located after the radio buttons group
+       const errorElement = document.querySelector('.gender-selection .error-message');
 
-        clearError(document.querySelector('.radio-group'), errorElement);
-        return true;
-    }
+       if (!selectedGender) {
+           showError(document.querySelector('.radio-group'), errorElement, 'Please select a gender');
+           return false;
+       }
 
-    function validateTerms() {
-        const terms = termsCheckbox.checked;
-        const errorElement = termsCheckbox.nextElementSibling.nextElementSibling;
+       clearError(document.querySelector('.radio-group'), errorElement);
+       return true;
+   }
 
-        if (!terms) {
-            showError(termsCheckbox, errorElement, 'You must accept the Terms and Conditions');
-            return false;
-        }
+   function validateTerms() {
+       const terms = termsCheckbox.checked;
+       const errorElement = termsCheckbox.nextElementSibling.nextElementSibling;
 
-        clearError(termsCheckbox, errorElement);
-        return true;
-    }
+       if (!terms) {
+           showError(termsCheckbox, errorElement, 'You must accept the Terms and Conditions');
+           return false;
+       }
 
-    function isValidEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    }
+       clearError(termsCheckbox, errorElement);
+       return true;
+   }
 
-    function showError(input, errorElement, message) {
-        input.classList.add('error');
-        errorElement.textContent = message;
-        errorElement.style.display = 'block';
-    }
+   function isValidEmail(email) {
+       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+       return emailRegex.test(email);
+   }
 
-    function clearError(input, errorElement) {
-        input.classList.remove('error');
-        errorElement.textContent = '';
-        errorElement.style.display = 'none';
-    }
+   function showError(input, errorElement, message) {
+       input.classList.add('error');
+       errorElement.textContent = message;
+       errorElement.style.display = 'block';
+   }
 
-    // Format phone number as user types
-    phoneInput.addEventListener('input', function(e) {
-        let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+   function clearError(input, errorElement) {
+       input.classList.remove('error');
+       errorElement.textContent = '';
+       errorElement.style.display = 'none';
+   }
 
-        if (value.length > 3) {
-            value = value.substring(0, 3) + '-' + value.substring(3, 10);
-        }
+   // Format phone number as user types
+   phoneInput.addEventListener('input', function(e) {
+       let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
 
-        e.target.value = value;
-    });
+       if (value.length > 3) {
+           value = value.substring(0, 3) + '-' + value.substring(3, 10);
+       }
 
-    // Adding functionality for terms and conditions modal
-    const termsLink = document.querySelector('.terms-link');
-    const termsModal = document.getElementById('termsModal');
-    const closeButton = document.querySelector('.close');
-    const acceptTermsButton = document.getElementById('acceptTerms');
+       e.target.value = value;
+   });
 
-    if (termsLink) {
-        termsLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            termsModal.style.display = 'block';
-        });
-    }
+   // Adding functionality for terms and conditions modal
+   const termsLink = document.querySelector('.terms-link');
+   const termsModal = document.getElementById('termsModal');
+   const closeButton = document.querySelector('.close');
+   const acceptTermsButton = document.getElementById('acceptTerms');
 
-    if (closeButton) {
-        closeButton.addEventListener('click', function() {
-            termsModal.style.display = 'none';
-        });
-    }
+   if (termsLink) {
+       termsLink.addEventListener('click', function(e) {
+           e.preventDefault();
+           termsModal.style.display = 'block';
+       });
+   }
 
-    if (acceptTermsButton) {
-        acceptTermsButton.addEventListener('click', function() {
-            termsCheckbox.checked = true;
-            validateTerms();
-            termsModal.style.display = 'none';
-        });
-    }
+   if (closeButton) {
+       closeButton.addEventListener('click', function() {
+           termsModal.style.display = 'none';
+       });
+   }
 
-    // Close the modal when clicking outside of its content
-    window.addEventListener('click', function(e) {
-        if (e.target === termsModal) {
-            termsModal.style.display = 'none';
-        }
-    });
+   if (acceptTermsButton) {
+       acceptTermsButton.addEventListener('click', function() {
+           termsCheckbox.checked = true;
+           validateTerms();
+           termsModal.style.display = 'none';
+       });
+   }
+
+   // Close the modal when clicking outside of its content
+   window.addEventListener('click', function(e) {
+       if (e.target === termsModal) {
+           termsModal.style.display = 'none';
+       }
+   });
 });

@@ -1,4 +1,4 @@
-# pages/register/register.py
+# register.py
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 import db_connector
 import re
@@ -81,8 +81,8 @@ def validate_registration_form(firstName, lastName, email, phone, city, password
     if not re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', email):
         errors.append("Invalid email format")
 
-    # Check phone
-    if not re.match(r'^05\d{8}$', phone):
+    # Check phone - דורש את המקף או מקבל גם בלעדיו
+    if not re.match(r'^05\d-?\d{7}$', phone):
         errors.append("Invalid phone number")
 
     # Check city

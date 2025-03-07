@@ -1,4 +1,4 @@
-// contact-us.js - JavaScript file for Contact Us page
+// contact-us.js
 
 document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.getElementById('contactForm');

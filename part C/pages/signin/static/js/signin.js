@@ -1,4 +1,4 @@
-// signin.js - JavaScript for login validation and form handling
+// signin.js
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const emailInput = document.querySelector('input[name="email"]');

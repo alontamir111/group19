@@ -1,14 +1,15 @@
-// classes.js - JavaScript file for class types page
+// classes.js
 
 document.addEventListener('DOMContentLoaded', function() {
     // Function to check if element is visible on screen
     function isElementInViewport(el) {
         const rect = el.getBoundingClientRect();
+        // Check if ANY part of the element is in viewport, not just the entire element
         return (
-            rect.top >= 0 &&
-            rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            (rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+             rect.bottom >= 0) &&
+            (rect.left <= (window.innerWidth || document.documentElement.clientWidth) &&
+             rect.right >= 0)
         );
     }
 
@@ -16,6 +17,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleScroll() {
         const items = document.querySelectorAll('.class-card');
 
+        // Automatically show all cards on small screens
+        if (window.innerWidth <= 576) {
+            items.forEach(item => {
+                item.classList.add('visible');
+            });
+            return;
+        }
+
+        // Regular viewport check for larger screens
         items.forEach(item => {
             if (isElementInViewport(item)) {
                 item.classList.add('visible');
@@ -25,9 +35,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add animations to cards when scrolling
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleScroll); // Also check when window is resized
     handleScroll(); // Initial check on page load
 
-    // Add hover effect to images
+    // The rest of your code remains unchanged...
     const classImages = document.querySelectorAll('.class-image');
     classImages.forEach(image => {
         image.addEventListener('mouseenter', function() {

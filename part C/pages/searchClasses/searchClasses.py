@@ -1,4 +1,4 @@
-# pages/searchClasses/searchClasses.py
+# searchClasses.py
 from flask import Blueprint, render_template, request, session, jsonify, redirect, url_for
 from functools import wraps
 from bson import ObjectId

@@ -1,14 +1,15 @@
-// studios.js - JavaScript file for the studios page
+// studios.js
 
 document.addEventListener('DOMContentLoaded', function() {
     // Function to check if element is visible in viewport
     function isElementInViewport(el) {
         const rect = el.getBoundingClientRect();
+        // Check if ANY part of the element is in viewport, not just the entire element
         return (
-            rect.top >= 0 &&
-            rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            (rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+             rect.bottom >= 0) &&
+            (rect.left <= (window.innerWidth || document.documentElement.clientWidth) &&
+             rect.right >= 0)
         );
     }
 
@@ -16,6 +17,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleScroll() {
         const items = document.querySelectorAll('.studio-card, .facility-item');
 
+        // Automatically show all items on small screens
+        if (window.innerWidth <= 992) {
+            items.forEach(item => {
+                item.classList.add('visible');
+            });
+            return;
+        }
+
+        // Regular viewport check for larger screens
         items.forEach(item => {
             if (isElementInViewport(item)) {
                 item.classList.add('visible');
@@ -23,8 +33,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Execute function on load and scroll
+    // Execute function on load, scroll and resize
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleScroll); // Also check when window is resized
     handleScroll(); // Initial check on page load
 
     // Hover effect for studio images

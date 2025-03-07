@@ -1,4 +1,4 @@
-// searchClasses.js - JavaScript file for the class search page
+// searchClasses.js
 
 document.addEventListener('DOMContentLoaded', () => {
     // Get DOM elements

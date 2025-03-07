@@ -1,4 +1,4 @@
-# pages/profile/profile.py
+# profile.py
 from flask import Blueprint, render_template, request, session, redirect, url_for, flash, jsonify
 from functools import wraps
 import db_connector
